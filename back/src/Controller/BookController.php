@@ -78,7 +78,7 @@ class BookController extends AbstractController
                 $data['authorId']
             );
             $this->commandBus->dispatch($command);
-        } catch (BookTitleRequiredExceptio $exception) {
+        } catch (BookTitleRequiredException $exception) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
         }  catch (BookNotFoundException $exception) {
             return $this->jsonNotFoundResponse('O livro não foi encontrado');
