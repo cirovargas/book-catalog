@@ -1,0 +1,8 @@
+### Create new subject
+
+POST http://localhost:3000/api/subjects
+Content-Type: application/json
+
+{
+  "description": "Teste2"
+}

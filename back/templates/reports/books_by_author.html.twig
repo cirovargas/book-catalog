@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório por Autor</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        h1 { text-align: center; }
+        .author { margin-bottom: 20px; }
+        .author h2 { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+<h1>Relatório de Livros por Autor</h1>
+{% for author in authors %}
+    <div class="author">
+        <h2>{{ author.authorName }}</h2>
+        <p><strong>Livros:</strong> {{ author.bookTitles }}</p>
+        <p><strong>Assuntos:</strong> {{ author.subjects }}</p>
+    </div>
+{% else %}
+    <p>Nenhum dado encontrado.</p>
+{% endfor %}
+</body>
+</html>

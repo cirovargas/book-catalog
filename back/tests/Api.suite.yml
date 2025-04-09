@@ -1,0 +1,18 @@
+actor: ApiTester
+suite_namespace: App\Tests\Api
+modules:
+    # enable helpers as array
+    enabled:
+      - Cli: ~
+      - Symfony:
+          app_path: 'src'
+          environment: 'test'
+      - REST:
+          url: http://localhost:3000/api
+          depends: Symfony
+          part: Json
+      - Db:
+          dsn: 'pgsql:host=postgres;dbname=bookstore_test'
+          user: 'bookstore'
+          password: '1234'
+          cleanup: true
