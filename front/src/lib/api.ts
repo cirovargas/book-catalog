@@ -32,7 +32,7 @@ export const booksApi = {
   create: (data: {
     title: string;
     edition: number;
-    publish_year: number;
+    publishYear: number;
     subjectIds: string[];
     authorIds: string[];
     price: number;
@@ -41,7 +41,7 @@ export const booksApi = {
   update: (id: string, data: {
     title: string;
     edition: number;
-    publish_year: number;
+    publishYear: number;
     subjectIds: string[];
     authorIds: string[];
     price: number;

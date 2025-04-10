@@ -7,9 +7,9 @@ interface Book {
   id: string;
   title: string;
   edition: number;
-  publish_year: number;
-  subject_ids: string[];
-  author_ids: string[];
+  publishYear: number;
+  subjects: Subject[];
+  authors: Author[];
   price: number;
   publisher: string;
 }
@@ -27,29 +27,20 @@ interface Author {
 interface BookFormProps {
   onSuccess: () => void;
   initialData?: Book;
+  cancelUpdate: () => void;
 }
 
-export function BookForm({ onSuccess, initialData }: BookFormProps) {
+export function BookForm({ onSuccess, initialData, cancelUpdate }: BookFormProps) {
   const [title, setTitle] = useState(initialData?.title || '');
   const [edition, setEdition] = useState(initialData?.edition || 1);
-  const [publishYear, setPublishYear] = useState<number>(initialData?.publish_year || new Date().getFullYear());
-  const [subjectIds, setSubjectIds] = useState<string[]>(initialData?.subject_ids || []);
-  const [authorIds, setAuthorIds] = useState<string[]>(initialData?.author_ids || []);
+  const [publishYear, setPublishYear] = useState<number>(initialData?.publishYear || new Date().getFullYear());
+  const [subjectIds, setSubjectIds] = useState<string[]>(initialData?.subjects.map((subject) => subject.id) || []);
+  const [authorIds, setAuthorIds] = useState<string[]>(initialData?.authors.map((author) => author.id) || []);
   const [price, setPrice] = useState(initialData?.price || 0);
   const [publisher, setPublisher] = useState(initialData?.publisher || '');
   const [loading, setLoading] = useState(false);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [authors, setAuthors] = useState<Author[]>([]);
-
-  useEffect(() => {
-    setTitle(initialData?.title || '');
-    setEdition(initialData?.edition || 1);
-    setPublishYear(initialData?.publish_year || new Date().getFullYear());
-    setSubjectIds(initialData?.subject_ids || []);
-    setAuthorIds(initialData?.author_ids || []);
-    setPrice(initialData?.price || 0);
-    setPublisher(initialData?.publisher || '');
-  },[initialData])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +58,16 @@ export function BookForm({ onSuccess, initialData }: BookFormProps) {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+      setTitle(initialData?.title || '');
+      setEdition(initialData?.edition || 1);
+      setPublishYear(initialData?.publishYear || '');
+      setSubjectIds(initialData?.subjects.map((subject) => subject.id) || []);
+      setAuthorIds(initialData?.authors.map((author) => author.id) || []);
+      setPrice(initialData?.price || 0);
+      setPublisher(initialData?.publisher || '');
+  }, [initialData]);
 
   const formatPrice = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -150,6 +151,10 @@ export function BookForm({ onSuccess, initialData }: BookFormProps) {
     }
   };
 
+  const handleCancel = () => {
+    onSuccess();
+  };
+
   return (
     <form onSubmit={handleSubmit} className="mb-4">
       <div className="mb-3">
@@ -200,55 +205,61 @@ export function BookForm({ onSuccess, initialData }: BookFormProps) {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="subjects" className="form-label">
+        <label className="form-label">
           Assuntos
         </label>
-        <select
-          id="subjects"
-          multiple
-          name='subjects'
-          value={subjectIds}
-          onChange={(e) => {
-            const values = Array.from(e.target.selectedOptions, option => option.value);
-            setSubjectIds(values);
-          }}
-          className="form-select"
-          required
-          size={4}
-        >
+        <div className="border rounded p-3" style={{ maxHeight: '200px', overflowY: 'auto' }}>
           {subjects.map((subject) => (
-            <option key={subject.id} value={subject.id}>
-              {subject.description}
-            </option>
+            <div key={subject.id} className="form-check">
+              <input
+                type="checkbox"
+                id={`subject-${subject.id}`}
+                className="form-check-input"
+                checked={subjectIds.includes(subject.id)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSubjectIds([...subjectIds, subject.id]);
+                  } else {
+                    setSubjectIds(subjectIds.filter(id => id !== subject.id));
+                  }
+                }}
+              />
+              <label className="form-check-label" htmlFor={`subject-${subject.id}`}>
+                {subject.description}
+              </label>
+            </div>
           ))}
-        </select>
-        <small className="text-muted">Pressione Ctrl (ou Cmd no Mac) para selecionar múltiplos assuntos</small>
+        </div>
+        <small className="text-muted">Selecione um ou mais assuntos</small>
       </div>
 
       <div className="mb-3">
-        <label htmlFor="authors" className="form-label">
+        <label className="form-label">
           Autores
         </label>
-        <select
-          id="authors"
-          multiple
-          name='authors'
-          value={authorIds}
-          onChange={(e) => {
-            const values = Array.from(e.target.selectedOptions, option => option.value);
-            setAuthorIds(values);
-          }}
-          className="form-select"
-          required
-          size={4}
-        >
+        <div className="border rounded p-3" style={{ maxHeight: '200px', overflowY: 'auto' }}>
           {authors.map((author) => (
-            <option key={author.id} value={author.id}>
-              {author.name}
-            </option>
+            <div key={author.id} className="form-check">
+              <input
+                type="checkbox"
+                id={`author-${author.id}`}
+                className="form-check-input"
+                checked={authorIds.includes(author.id)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setAuthorIds([...authorIds, author.id]);
+                  } else {
+                    setAuthorIds(authorIds.filter(id => id !== author.id));
+                  }
+                }}
+              />
+              <label className="form-check-label" htmlFor={`author-${author.id}`}>
+                {author.name}
+              </label>
+            </div>
           ))}
-        </select>
-        <small className="text-muted">Pressione Ctrl (ou Cmd no Mac) para selecionar múltiplos autores</small>
+        </div>
+        <small className="text-muted">Selecione um ou mais autores</small>
       </div>
 
       <div className="mb-3">
@@ -280,20 +291,31 @@ export function BookForm({ onSuccess, initialData }: BookFormProps) {
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="btn btn-primary d-inline-flex align-items-center gap-2"
-      >
-        {loading ? (
-          'Carregando...'
-        ) : (
-          <>
-            {initialData ? <Save size={18} /> : <PlusCircle size={18} />}
-            {initialData ? 'Atualizar Livro' : 'Adicionar Livro'}
-          </>
+      <div className="d-flex gap-2">
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn btn-primary d-inline-flex align-items-center gap-2"
+        >
+          {loading ? (
+            'Carregando...'
+          ) : (
+            <>
+              {initialData ? <Save size={18} /> : <PlusCircle size={18} />}
+              {initialData ? 'Atualizar Livro' : 'Adicionar Livro'}
+            </>
+          )}
+        </button>
+        {initialData && (
+          <button
+            type="button"
+            onClick={cancelUpdate}
+            className="btn btn-secondary"
+          >
+            Cancelar
+          </button>
         )}
-      </button>
+      </div>
     </form>
   );
 }

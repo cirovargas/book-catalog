@@ -74,8 +74,8 @@ class BookController extends AbstractController
                 $data['publishYear'],
                 $data['price'],
                 $data['publisher'],
-                $data['subjectId'],
-                $data['authorId']
+                $data['subjectIds'],
+                $data['authorIds']
             );
             $this->commandBus->dispatch($command);
         } catch (BookTitleRequiredException $exception) {

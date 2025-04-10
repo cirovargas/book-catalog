@@ -11,8 +11,8 @@ class UpdateBookCommand
         private readonly int $publishYear,
         private readonly float $price,
         private readonly string $publisher,
-        private readonly int $subjectId,
-        private readonly int $authorId
+        private readonly array $subjectIds,
+        private readonly array $authorIds
     ) {
     }
 
@@ -46,13 +46,19 @@ class UpdateBookCommand
         return $this->publisher;
     }
 
-    public function getSubjectId(): int
+    /*
+     * @return int[]
+     */
+    public function getSubjectIds(): array
     {
-        return $this->subjectId;
+        return $this->subjectIds;
     }
 
-    public function getAuthorId(): int
+    /*
+     * @return int[]
+     */
+    public function getAuthorIds(): array
     {
-        return $this->authorId;
+        return $this->authorIds;
     }
 } 

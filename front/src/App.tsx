@@ -199,6 +199,7 @@ function App() {
                       fetchData();
                       setEditingItem(null);
                     }}
+                    cancelUpdate={() => setEditingItem(null)}
                     initialData={editingItem}
                   />
                 )}
@@ -287,7 +288,7 @@ function App() {
                           <p className="mb-1">Autores: {book.authors?.map(author => author.name).join(', ')}</p>
                           <p className="mb-1">Assuntos: {book.subjects?.map(subject => subject.description).join(', ')}</p>
                           <p className="mb-1">Edição: {book.edition}</p>
-                          <p className="mb-1">Ano de Publicação: {book.publish_year}</p>
+                          <p className="mb-1">Ano de Publicação: {book.publishYear}</p>
                           <p className="mb-1">Editora: {book.publisher}</p>
                           <p className="mb-0">Preço: {new Intl.NumberFormat('pt-BR', {
                             style: 'currency',

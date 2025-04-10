@@ -44,6 +44,24 @@ class Book
         $this->authors = $authors;
     }
 
+    public function update(
+        string $title,
+        int $edition,
+        string $publishYear,
+        int $price,
+        string $publisher,
+        iterable $subjects,
+        iterable $authors
+    ) {
+        $this->title = $title;
+        $this->edition = $edition;
+        $this->publishYear = $publishYear;
+        $this->price = $price;
+        $this->publisher = $publisher;
+        $this->subjects = $subjects;
+        $this->authors = $authors;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
