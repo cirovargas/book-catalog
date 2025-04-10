@@ -65,9 +65,7 @@ class SubjectController extends AbstractController
     public function update(int $id, Request $request): JsonResponse
     {
         try {
-            $data = json_decode($request->getContent(), true);
-
-            $command = new UpdateSubjectCommand($id, $data['description']);
+            $command = $this->getRequestContent(UpdateSubjectCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
         } catch (SubjectDescriptionRequiredException $exception) {
             return $this->jsonErrorResponse('O campo descrição é obrigatório');

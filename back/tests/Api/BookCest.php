@@ -18,7 +18,8 @@ final class BookCest
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPost('/books', [
-            'title' => 'Teste book'
+            'title' => 'Teste book',
+
         ]);
         $I->seeResponseCodeIsSuccessful();
         $I->seeResponseIsJson();

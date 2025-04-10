@@ -67,16 +67,7 @@ class BookController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
 
-            $command = new UpdateBookCommand(
-                $id,
-                $data['title'],
-                $data['edition'],
-                $data['publishYear'],
-                $data['price'],
-                $data['publisher'],
-                $data['subjectIds'],
-                $data['authorIds']
-            );
+            $command = $this->getRequestContent(UpdateBookCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
         } catch (BookTitleRequiredException $exception) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');

@@ -62,9 +62,7 @@ class AuthorController extends AbstractController
     public function update(int $id, Request $request): JsonResponse
     {
         try {
-            $data = json_decode($request->getContent(), true);
-
-            $command = new UpdateAuthorCommand($id, $data['name']);
+            $command = $this->getRequestContent(UpdateAuthorCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
         } catch (AuthorNameRequiredException $exception) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');

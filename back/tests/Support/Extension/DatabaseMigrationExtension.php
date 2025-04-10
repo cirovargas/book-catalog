@@ -8,7 +8,7 @@ use Codeception\Extension;
 class DatabaseMigrationExtension extends Extension
 {
     public static $events = [
-        Events::SUITE_BEFORE => 'beforeSuite',
+        Events::SUITE_BEFORE => 'beforeSuite'
     ];
 
     public function beforeSuite()
@@ -16,10 +16,13 @@ class DatabaseMigrationExtension extends Extension
         try {
             /** @var \Codeception\Module\Cli $cli */
             $cli = $this->getModule('Cli');
-
+//
 //            $this->writeln('Recreating the DB...');
-//            $cli->runShellCommand('bin/console doctrine:database:create --if-not-exists --env=test');
+//            $cli->runShellCommand('bin/console doctrine:schema:create --if-not-exists --force --env=test');
 //            $cli->seeResultCodeIs(0);
+            $this->writeln('Recreating the DB...');
+            $cli->runShellCommand('bin/console doctrine:database:create --if-not-exists --env=test');
+            $cli->seeResultCodeIs(0);
 //            $this->writeln('Dropping schema...');
 //            $cli->runShellCommand('bin/console doctrine:schema:drop --force --env=test');
 //            $cli->seeResultCodeIs(0);
