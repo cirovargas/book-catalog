@@ -17,8 +17,22 @@ final class BookCest
     public function createBookTest(ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPost('/authors', [
+            'name' => 'Teste author livro'
+        ]);
+        $authorId = $I->grabFromDatabase('authors', 'id', ['name' => 'Teste author livro']);
+        $I->sendPost('/subjects', [
+            'description' => 'Teste subject livro'
+        ]);
+        $subjectId = $I->grabFromDatabase('subjects', 'id', ['description' => 'Teste subject livro']);
         $I->sendPost('/books', [
             'title' => 'Teste book',
+            'publisher' => 'Editora',
+            'price' => 1234,
+            'edition' => 5,
+            'publishYear' => 2020,
+            'authorIds' => [$authorId],
+            'subjectIds' => [$subjectId]
 
         ]);
         $I->seeResponseCodeIsSuccessful();
@@ -31,8 +45,24 @@ final class BookCest
     public function createBook2Test(ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->sendPost('/authors', [
+            'name' => 'Teste author livro2'
+        ]);
+        $authorId = $I->grabFromDatabase('authors', 'id', ['name' => 'Teste author livro2']);
+        $I->sendPost('/subjects', [
+            'description' => 'Teste subject livro2'
+        ]);
+        $subjectId = $I->grabFromDatabase('subjects', 'id', ['description' => 'Teste subject livro2']);
         $I->sendPost('/books', [
-            'title' => 'Teste book2'
+            'title' => 'Teste book2',
+            'publisher' => 'Editora',
+            'price' => 1234,
+            'edition' => 5,
+            'publishYear' => 2020,
+            'authorIds' => [$authorId],
+            'subjectIds' => [$subjectId]
+
         ]);
         $I->seeResponseCodeIsSuccessful();
         $I->seeResponseIsJson();
@@ -76,8 +106,17 @@ final class BookCest
     {
         $bookId = $I->grabFromDatabase('books', 'id', ['title' => 'Teste book']);
         $I->haveHttpHeader('Content-Type', 'application/json');
+        $authorId = $I->grabFromDatabase('authors', 'id', ['name' => 'Teste author livro2']);
+        $subjectId = $I->grabFromDatabase('subjects', 'id', ['description' => 'Teste subject livro2']);
         $I->sendPut('/books/'.$bookId, [
-            'title' => 'Novo book'
+            'title' => 'Novo book',
+            'publisher' => 'Editora',
+            'price' => 1234,
+            'edition' => 5,
+            'publishYear' => 2020,
+            'authorIds' => [$authorId],
+            'subjectIds' => [$subjectId]
+
         ]);
         $I->seeResponseCodeIsSuccessful();
         $I->seeResponseIsJson();
@@ -90,7 +129,14 @@ final class BookCest
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPut('/books/99', [
-            'title' => 'alterar book'
+            'title' => 'Novo book',
+            'publisher' => 'Editora',
+            'price' => 1234,
+            'edition' => 5,
+            'publishYear' => 2020,
+            'authorIds' => [5],
+            'subjectIds' => [5]
+
         ]);
         $I->canSeeResponseCodeIsClientError();
         $I->seeResponseIsJson();

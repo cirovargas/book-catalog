@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AbstractController extends SymfonyAbstractController
 {
-    protected function getRequestContent(string $class = null, array $params = []): array|object
+    protected function getRequestContent(string $class = null, array $params = []): object
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
         $content = json_decode($request->getContent(), true);
