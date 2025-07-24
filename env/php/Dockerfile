@@ -1,11 +1,13 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 WORKDIR /app
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-RUN chmod +x /usr/local/bin/install-php-extensions && sync
 
-RUN apk update && apk add --no-cache \
+RUN chmod +x /usr/local/bin/install-php-extensions  \
+    && sync  \
+    && apk update  \
+    && apk add --no-cache \
       zip \
       wget \
       curl \
@@ -15,9 +17,14 @@ RUN apk update && apk add --no-cache \
     && install-php-extensions \
       intl \
       pdo_pgsql \
+      pcntl \
       zip \
       sockets \
       @composer \
+    && curl -sS https://get.symfony.com/cli/installer | bash \
+    && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony \
+    && rm -rf /root/.symfony5 \
+    && chmod +x /usr/local/bin/symfony \
     && rm -rf /var/cache/apk/*
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
