@@ -10,7 +10,6 @@ return RectorConfig::configure()
         __DIR__ . '/core',
         __DIR__ . '/src',
     ])
-    // uncomment to reach your current PHP version
     ->withPhpSets(php84: true)
     ->withPhpVersion(PhpVersion::PHP_84)
     ->withTypeCoverageLevel(10)
@@ -28,5 +27,12 @@ return RectorConfig::configure()
         earlyReturn: true,
         symfonyConfigs: true,
         codingStyle: true,
-        instanceOf: true
-    );
+        instanceOf: true,
+        privatization: true
+    )
+    ->withRules([
+        \Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector::class,
+        \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class,
+        \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector::class,
+        \Rector\Renaming\Rector\FunctionLike\RenameFunctionLikeParamWithinCallLikeArgRector::class
+    ]);
