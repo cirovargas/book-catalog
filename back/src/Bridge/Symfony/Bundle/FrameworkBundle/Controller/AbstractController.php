@@ -3,45 +3,28 @@
 namespace App\Bridge\Symfony\Bundle\FrameworkBundle\Controller;
 
 use App\Exception\BadJsonBodyException;
+use DEPTRAC_INTERNAL\___PHPSTORM_HELPERS\object;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyAbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 class AbstractController extends SymfonyAbstractController
 {
-    protected function getRequestContent(?string $class = null, array $params = []): object
-    {
-        $request = $this->container->get('request_stack')->getCurrentRequest();
-        $content = json_decode((string) $request->getContent(), true);
 
-        if (!$content) {
-            throw new BadJsonBodyException();
-        }
-
-        $content = (object)array_merge($content, $params);
-
-        if ($class === null || $class === '' || $class === '0') {
-            return $content;
-        }
-
-        try {
-            $object = $this->container->get('serializer')->deserialize(json_encode($content), $class, 'json');
-            return $object;
-        } catch (\Exception) {
-            throw new BadJsonBodyException();
-        }
-    }
-
+    /**
+     * @param array<string, string> $headers
+     * @param array<string, string> $context
+     */
     protected function jsonSuccessResponse(
-        $data,
-        int $status = Response::HTTP_OK,
-        array $headers = [],
-        array $context = []
+        mixed $data,
+        int                 $status = Response::HTTP_OK,
+        array               $headers = [],
+        array               $context = []
     ): JsonResponse {
         return $this->json(
             [
-            'success' => true,
-            'data' => $data
+                'success' => true,
+                'data' => $data
             ],
             $status,
             $headers,
@@ -49,8 +32,13 @@ class AbstractController extends SymfonyAbstractController
         );
     }
 
+    /**
+     * @param int $status
+     * @param array<string, string> $headers
+     * @param array<string, string> $context
+     */
     protected function jsonErrorResponse(
-        $message,
+        string $message,
         int $status = Response::HTTP_INTERNAL_SERVER_ERROR,
         array $headers = [],
         array $context = []
@@ -66,8 +54,13 @@ class AbstractController extends SymfonyAbstractController
         );
     }
 
+    /**
+     * @param int $status
+     * @param array<string, string> $headers
+     * @param array<string, string> $context
+     */
     protected function jsonNotFoundResponse(
-        $message,
+        string $message,
         int $status = Response::HTTP_NOT_FOUND,
         array $headers = [],
         array $context = []
