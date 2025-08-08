@@ -7,6 +7,12 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository as BaseServiceEntityRepository;
 use InvalidArgumentException;
 
+
+/**
+ * @inheritDoc
+ * @template T of object
+ * @template-extends BaseServiceEntityRepository<T>
+ */
 class ServiceEntityRepository extends BaseServiceEntityRepository implements BaseAbstractRepository
 {
     public function __construct(ManagerRegistry $registry)

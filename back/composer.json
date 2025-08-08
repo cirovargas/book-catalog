@@ -44,7 +44,8 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
-            "DDD\\": "core/"
+            "DDD\\": "core/",
+            "Utils\\Rector\\": "utils/rector/src"
         }
     },
     "autoload-dev": {

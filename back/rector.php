@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\ValueObject\PhpVersion;
+use Rector\Set\ValueObject\SetList;
+use Rector\Doctrine\Set\DoctrineSetList;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -20,6 +22,9 @@ return RectorConfig::configure()
     )
     ->withDeadCodeLevel(10)
     ->withCodeQualityLevel(10)
+//    ->withSets([
+//        DoctrineSetList::DOCTRINE_BUNDLE_230
+//    ])
     ->withPreparedSets(
         symfonyCodeQuality: true,
         doctrineCodeQuality: true,
@@ -38,4 +43,5 @@ return RectorConfig::configure()
         \Rector\TypeDeclaration\Rector\ClassMethod\AddParamArrayDocblockBasedOnCallableNativeFuncCallRector::class,
         \Rector\TypeDeclaration\Rector\ClassMethod\AddReturnArrayDocblockBasedOnArrayMapRector::class,
         \Rector\Doctrine\TypedCollections\Rector\Class_\CompleteParamDocblockFromSetterToCollectionRector::class,
+        \Utils\Rector\Rector\AddAnnotationToRepositoryRector::class
     ]);
