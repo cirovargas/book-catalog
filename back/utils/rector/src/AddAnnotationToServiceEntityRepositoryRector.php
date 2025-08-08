@@ -114,6 +114,7 @@ CODE_SAMPLE
         $repositoryClassName = end(explode('\\' , ServiceEntityRepository::class));
         $genericsAnnotation = \sprintf('%s<%s>', $repositoryClassName, $entityClassName);
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@extends', new GenericTagValueNode($genericsAnnotation)));
+        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@phpstan-ignore-next-line', new GenericTagValueNode('generics.interfaceConflict')));
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($class);
     }
     private function hasExtendsAnnotation(Class_ $class) : bool

@@ -8,6 +8,8 @@ use DDD\Model\Category\Repository\CategoryRepositoryInterface;
 
 /**
  * @extends ServiceEntityRepository<Category>
+ *
+ * @phpstan-ignore-next-line generics.interfaceConflict
  */
 class CategoryRepository extends ServiceEntityRepository implements CategoryRepositoryInterface
 {

@@ -17,7 +17,7 @@ class DeleteCategoryHandler
     {
         $category = $this->categoryRepository->get($command->getId());
 
-        if (null === $category) {
+        if (!$category instanceof \DDD\Model\Category\Category) {
             throw new CategoryNotFoundException();
         }
 

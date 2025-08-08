@@ -2,8 +2,8 @@
 
 namespace DDD\Model\Category\Repository;
 
-use App\Entity\Category;
 use DDD\Application\Repository\AbstractRepository;
+use DDD\Model\Category\Category;
 
 /**
  * @extends AbstractRepository<Category>
@@ -16,6 +16,7 @@ interface CategoryRepositoryInterface extends AbstractRepository
 
     /**
      * @param array<int> $ids
+     *
      * @return iterable<Category>
      */
     public function getByIds(array $ids): iterable;

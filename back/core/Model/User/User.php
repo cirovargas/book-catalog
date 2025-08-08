@@ -11,7 +11,7 @@ class User
      */
     public function __construct(
         protected string $email,
-        protected string $password
+        protected string $password,
     ) {
     }
 }

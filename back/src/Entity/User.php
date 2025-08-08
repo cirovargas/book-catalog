@@ -17,6 +17,7 @@ class User extends BaseModel implements UserInterface, PasswordAuthenticatedUser
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     *
      * @return non-empty-string
      */
     public function getUserIdentifier(): string
@@ -26,6 +27,7 @@ class User extends BaseModel implements UserInterface, PasswordAuthenticatedUser
 
     /**
      * @see UserInterface
+     *
      * @return array<string>
      */
     public function getRoles(): array

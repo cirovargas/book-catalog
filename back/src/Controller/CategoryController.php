@@ -35,7 +35,7 @@ class CategoryController extends AbstractController
     {
         $category = $this->categoryRepository->get($id);
 
-        if (null === $category) {
+        if (!$category instanceof \DDD\Model\Category\Category) {
             return $this->jsonNotFoundResponse('Categoria não encontrada');
         }
 
@@ -62,7 +62,7 @@ class CategoryController extends AbstractController
 
     #[Route('/api/categories/{id}', name: 'categories_update', methods: ['PUT'])]
     public function update(
-        #[MapRequestPayload] UpdateCategoryCommand $command
+        #[MapRequestPayload] UpdateCategoryCommand $command,
     ): JsonResponse {
         try {
             $this->commandBus->dispatch($command);
