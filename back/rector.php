@@ -27,5 +27,6 @@ return RectorConfig::configure()
         strictBooleans: true,
         earlyReturn: true,
         symfonyConfigs: true,
-        codingStyle: true
+        codingStyle: true,
+        instanceOf: true
     );
