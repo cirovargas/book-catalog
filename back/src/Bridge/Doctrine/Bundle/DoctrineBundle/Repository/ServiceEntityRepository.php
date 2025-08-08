@@ -5,7 +5,6 @@ namespace App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository;
 use DDD\Application\Repository\AbstractRepository as BaseAbstractRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository as BaseServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use InvalidArgumentException;
 
 /**
  * @template T of object
@@ -41,7 +40,7 @@ abstract class ServiceEntityRepository extends BaseServiceEntityRepository imple
                 );
             }
 
-            throw new InvalidArgumentException($exceptionMessage);
+            throw new \InvalidArgumentException($exceptionMessage);
         }
 
         $this->getEntityManager()->persist($object);
@@ -63,7 +62,7 @@ abstract class ServiceEntityRepository extends BaseServiceEntityRepository imple
                 );
             }
 
-            throw new InvalidArgumentException($exceptionMessage);
+            throw new \InvalidArgumentException($exceptionMessage);
         }
 
         $this->getEntityManager()->remove($object);
