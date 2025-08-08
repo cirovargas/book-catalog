@@ -26,8 +26,8 @@ class ReleaseRecordedEventsMiddleware implements MiddlewareInterface
         }
 
         $recordedEvents = $this->eventRecorder->releaseEvents();
-        foreach ($recordedEvents as $event) {
-            $this->eventDispatcher->dispatch($event);
+        foreach ($recordedEvents as $recordedEvent) {
+            $this->eventDispatcher->dispatch($recordedEvent);
         }
 
         return $envelope;
