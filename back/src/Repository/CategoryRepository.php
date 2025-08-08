@@ -25,4 +25,9 @@ class CategoryRepository extends ServiceEntityRepository implements CategoryRepo
     {
         return $this->findBy(['id' => $ids]);
     }
+
+    public function getAll(): iterable
+    {
+        return $this->findAll();
+    }
 }

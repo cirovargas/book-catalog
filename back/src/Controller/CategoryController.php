@@ -27,13 +27,13 @@ class CategoryController extends AbstractController
     #[Route('/api/categories', name: 'categories_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
-        return $this->jsonSuccessResponse($this->categoryRepository->findAll());
+        return $this->jsonSuccessResponse($this->categoryRepository->getAll());
     }
 
     #[Route('/api/categories/{id}', name: 'categories_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
-        $category = $this->categoryRepository->find($id);
+        $category = $this->categoryRepository->get($id);
 
         if (null === $category) {
             return $this->jsonNotFoundResponse('Categoria não encontrada');
@@ -61,10 +61,10 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/api/categories/{id}', name: 'categories_update', methods: ['PUT'])]
-    public function update(int $id): JsonResponse
-    {
+    public function update(
+        #[MapRequestPayload] UpdateCategoryCommand $command
+    ): JsonResponse {
         try {
-            $command = $this->getRequestContent(UpdateCategoryCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
         } catch (CategoryNameRequiredException) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
@@ -78,10 +78,9 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/api/categories/{id}', name: 'categories_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
-    public function delete(int $id): JsonResponse
+    public function delete(#[MapRequestPayload] DeleteCategoryCommand $command): JsonResponse
     {
         try {
-            $command = new DeleteCategoryCommand($id);
             $this->commandBus->dispatch($command);
         } catch (CategoryNotFoundException) {
             return $this->jsonNotFoundResponse('A categoria não foi encontrada');

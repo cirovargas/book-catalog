@@ -15,7 +15,7 @@ class DeleteCategoryHandler
 
     public function __invoke(DeleteCategoryCommand $command): void
     {
-        $category = $this->categoryRepository->find($command->getId());
+        $category = $this->categoryRepository->get($command->getId());
 
         if (null === $category) {
             throw new CategoryNotFoundException();

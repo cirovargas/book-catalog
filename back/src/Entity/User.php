@@ -10,12 +10,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User extends BaseModel implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /** @var array<string> */
     private array $roles = [];
 
     /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     * @return non-empty-string
      */
     public function getUserIdentifier(): string
     {
@@ -24,6 +26,7 @@ class User extends BaseModel implements UserInterface, PasswordAuthenticatedUser
 
     /**
      * @see UserInterface
+     * @return array<string>
      */
     public function getRoles(): array
     {

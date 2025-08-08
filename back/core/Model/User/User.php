@@ -6,7 +6,12 @@ class User
 {
     protected ?int $id = null;
 
-    public function __construct(protected string $email, protected string $password)
-    {
+    /**
+     * @param non-empty-string $email
+     */
+    public function __construct(
+        protected string $email,
+        protected string $password
+    ) {
     }
 }
