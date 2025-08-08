@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/books')]
 class BookController extends AbstractController
 {
     public function __construct(
@@ -24,14 +23,12 @@ class BookController extends AbstractController
         private readonly MessageBusInterface $commandBus
     ) {
     }
-
-    #[Route('', name: 'books_list', methods: ['GET'])]
+    #[Route('/api/books', name: 'books_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         return $this->jsonSuccessResponse($this->bookRepository->findAll());
     }
-
-    #[Route('/{id}', name: 'books_show', methods: ['GET'])]
+    #[Route('/api/books/{id}', name: 'books_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
         $book = $this->bookRepository->find($id);
@@ -42,8 +39,7 @@ class BookController extends AbstractController
 
         return $this->jsonSuccessResponse($book);
     }
-
-    #[Route('', name: 'books_create', methods: ['POST'])]
+    #[Route('/api/books', name: 'books_create', methods: ['POST'])]
     public function create(): JsonResponse
     {
         try {
@@ -60,8 +56,7 @@ class BookController extends AbstractController
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
-
-    #[Route('/{id}', name: 'books_update', methods: ['PUT'])]
+    #[Route('/api/books/{id}', name: 'books_update', methods: ['PUT'])]
     public function update(int $id): JsonResponse
     {
         try {
@@ -77,8 +72,7 @@ class BookController extends AbstractController
 
         return $this->jsonSuccessResponse('Livro atualizado com sucesso!');
     }
-
-    #[Route('/{id}', name: 'books_delete', methods: ['DELETE'])]
+    #[Route('/api/books/{id}', name: 'books_delete', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {
         try {

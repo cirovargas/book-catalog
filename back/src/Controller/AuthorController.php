@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/authors')]
 class AuthorController extends AbstractController
 {
     public function __construct(
@@ -24,14 +23,12 @@ class AuthorController extends AbstractController
         private readonly MessageBusInterface $commandBus
     ) {
     }
-
-    #[Route('', name: 'authors_list', methods: ['GET'])]
+    #[Route('/api/authors', name: 'authors_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         return $this->jsonSuccessResponse($this->authorRepository->findAll());
     }
-
-    #[Route('/{id}', name: 'authors_show', methods: ['GET'])]
+    #[Route('/api/authors/{id}', name: 'authors_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
         $author = $this->authorRepository->find($id);
@@ -42,8 +39,7 @@ class AuthorController extends AbstractController
 
         return $this->jsonSuccessResponse($author);
     }
-
-    #[Route('', name: 'authors_create', methods: ['POST'])]
+    #[Route('/api/authors', name: 'authors_create', methods: ['POST'])]
     public function create(): JsonResponse
     {
         try {
@@ -57,9 +53,8 @@ class AuthorController extends AbstractController
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
-
-    #[Route('/{id}', name: 'authors_update', methods: ['PUT'])]
-    public function update(int $id, Request $request): JsonResponse
+    #[Route('/api/authors/{id}', name: 'authors_update', methods: ['PUT'])]
+    public function update(int $id): JsonResponse
     {
         try {
             $command = $this->getRequestContent(UpdateAuthorCommand::class, ['id' => $id]);
@@ -74,8 +69,7 @@ class AuthorController extends AbstractController
 
         return $this->jsonSuccessResponse('Autor atualizado com sucesso!');
     }
-
-    #[Route('/{id}', name: 'authors_delete', methods: ['DELETE'])]
+    #[Route('/api/authors/{id}', name: 'authors_delete', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {
         try {

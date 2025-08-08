@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/subjects')]
 class SubjectController extends AbstractController
 {
     public function __construct(
@@ -24,14 +23,12 @@ class SubjectController extends AbstractController
         private readonly MessageBusInterface $commandBus
     ) {
     }
-
-    #[Route('', name: 'subjects_list', methods: ['GET'])]
+    #[Route('/api/subjects', name: 'subjects_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         return $this->jsonSuccessResponse($this->subjectRepository->findAll());
     }
-
-    #[Route('/{id}', name: 'subjects_show', methods: ['GET'])]
+    #[Route('/api/subjects/{id}', name: 'subjects_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
         $subject = $this->subjectRepository->find($id);
@@ -42,8 +39,7 @@ class SubjectController extends AbstractController
 
         return $this->jsonSuccessResponse($subject);
     }
-
-    #[Route('', name: 'subjects_create', methods: ['POST'])]
+    #[Route('/api/subjects', name: 'subjects_create', methods: ['POST'])]
     public function create(): JsonResponse
     {
         try {
@@ -60,9 +56,8 @@ class SubjectController extends AbstractController
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
-
-    #[Route('/{id}', name: 'subjects_update', methods: ['PUT'])]
-    public function update(int $id, Request $request): JsonResponse
+    #[Route('/api/subjects/{id}', name: 'subjects_update', methods: ['PUT'])]
+    public function update(int $id): JsonResponse
     {
         try {
             $command = $this->getRequestContent(UpdateSubjectCommand::class, ['id' => $id]);
@@ -77,8 +72,7 @@ class SubjectController extends AbstractController
 
         return $this->jsonSuccessResponse('Assunto atualizado com sucesso!');
     }
-
-    #[Route('/{id}', name: 'subjects_delete', methods: ['DELETE'])]
+    #[Route('/api/subjects/{id}', name: 'subjects_delete', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {
         try {

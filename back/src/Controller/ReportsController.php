@@ -7,15 +7,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/reports')]
 class ReportsController extends AbstractController
 {
-    #[Route('/books-by-author', name: 'report_books_by_author')]
+    #[Route('/api/reports/books-by-author', name: 'report_books_by_author')]
     public function booksByAuthor(BooksByAuthorReportService $booksByAuthorReportService): Response
     {
         return new Response(
             $booksByAuthorReportService->generate(),
-            200,
+            \Symfony\Component\HttpFoundation\Response::HTTP_OK,
             [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'attachment; filename="relatorio_autores.pdf"',
