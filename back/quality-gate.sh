@@ -8,3 +8,4 @@
 ./vendor/bin/phpmd . text phpmd.xml --exclude 'tests/*,vendor/*,var/*,migrations/*,utils/*'
 ./vendor/bin/phpcs src core
 ./vendor/bin/phpstan analyse -l 10 src core
+./vendor/bin/codecept run

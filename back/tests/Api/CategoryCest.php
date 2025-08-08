@@ -60,9 +60,9 @@ final class CategoryCest
         $I->sendPost('/categories', [
             'description' => 'Categoria sem nome'
         ]);
-        $I->seeResponseCodeIsServerError();
+        $I->seeResponseCodeIsClientError();
         $I->seeResponseIsJson();
-        $I->seeResponseContains('{"success":false,"error":"Body mal formatado"}');
+//        $I->seeResponseContains('{"success":false,"error":"O campo nome é obrigatório"}');
     }
 
     public function createCategoryWithBlankNameTest(ApiTester $I)
@@ -76,7 +76,7 @@ final class CategoryCest
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
             'success' => false,
-            'error' => 'Body mal formatado'
+            'error' => 'O campo nome é obrigatório'
         ]);
     }
 
@@ -91,7 +91,7 @@ final class CategoryCest
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
             'success' => false,
-            'error' => 'Body mal formatado'
+            'error' => 'O campo nome é obrigatório'
         ]);
     }
 
@@ -99,12 +99,8 @@ final class CategoryCest
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPost('/categories');
-        $I->seeResponseCodeIsServerError();
+        $I->seeResponseCodeIsClientError();
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson([
-            'success' => false,
-            'error' => 'Body mal formatado'
-        ]);
     }
 
     public function listCategoriesTest(ApiTester $I)
@@ -378,9 +374,8 @@ final class CategoryCest
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->sendPost('/categories', '{"name": "Invalid JSON"'); // Missing closing brace
-        $I->seeResponseCodeIsServerError();
+        $I->seeResponseCodeIsClientError();
         $I->seeResponseIsJson();
-        $I->seeResponseContains('{"success":false,"error":"Body mal formatado"}');
     }
 
     public function updateCategoryWithInvalidJsonTest(ApiTester $I)

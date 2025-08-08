@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DDD\Model\Category\Command;
 
 class UpdateCategoryCommand
