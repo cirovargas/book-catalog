@@ -12,7 +12,7 @@ class StorageFile implements \Stringable
 
     public function __toString(): string
     {
-        return $this->pathname.'/'.$this->filename;
+        return $this->pathname . '/' . $this->filename;
     }
 
     public function getPathname(): string
