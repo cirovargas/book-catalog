@@ -23,11 +23,13 @@ class SubjectController extends AbstractController
         private readonly MessageBusInterface $commandBus
     ) {
     }
+
     #[Route('/api/subjects', name: 'subjects_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         return $this->jsonSuccessResponse($this->subjectRepository->findAll());
     }
+
     #[Route('/api/subjects/{id}', name: 'subjects_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
@@ -39,6 +41,7 @@ class SubjectController extends AbstractController
 
         return $this->jsonSuccessResponse($subject);
     }
+
     #[Route('/api/subjects', name: 'subjects_create', methods: ['POST'])]
     public function create(): JsonResponse
     {
@@ -56,6 +59,7 @@ class SubjectController extends AbstractController
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
+
     #[Route('/api/subjects/{id}', name: 'subjects_update', methods: ['PUT'])]
     public function update(int $id): JsonResponse
     {
@@ -72,6 +76,7 @@ class SubjectController extends AbstractController
 
         return $this->jsonSuccessResponse('Assunto atualizado com sucesso!');
     }
+
     #[Route('/api/subjects/{id}', name: 'subjects_delete', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {

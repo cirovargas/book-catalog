@@ -12,6 +12,7 @@ class SubjectRepository extends ServiceEntityRepository implements SubjectReposi
     {
         return $this->find($id);
     }
+
     public function getEntityClassName(): string
     {
         return Subject::class;

@@ -12,8 +12,8 @@ class ErrorHandlingMiddleware implements MiddlewareInterface
     {
         try {
             $envelope = $stack->next()->handle($envelope, $stack);
-        } catch (\Exception $e) {
-            $previous = $e->getPrevious();
+        } catch (\Exception $exception) {
+            $previous = $exception->getPrevious();
             if ($previous instanceof \Exception) {
                 throw $previous;
             }

@@ -28,6 +28,7 @@ class UpdateCategoryHandler
 
         $category->setName($command->getName());
         $category->setDescription($command->getDescription());
+
         $this->categoryRepository->save($category);
     }
 }

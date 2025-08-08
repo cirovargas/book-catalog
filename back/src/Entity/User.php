@@ -19,7 +19,7 @@ class User extends BaseModel implements UserInterface, PasswordAuthenticatedUser
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**

@@ -13,10 +13,19 @@ return RectorConfig::configure()
     // uncomment to reach your current PHP version
     ->withPhpSets(php84: true)
     ->withPhpVersion(PhpVersion::PHP_84)
-    ->withTypeCoverageLevel(0)
-    ->withComposerBased(symfony: true, doctrine: true)
-    ->withDeadCodeLevel(0)
-    ->withCodeQualityLevel(0)
+    ->withTypeCoverageLevel(10)
+    ->withComposerBased(
+        symfony: true,
+        doctrine: true,
+        twig: true
+    )
+    ->withDeadCodeLevel(10)
+    ->withCodeQualityLevel(10)
     ->withPreparedSets(
-        symfonyCodeQuality: true
+        symfonyCodeQuality: true,
+        doctrineCodeQuality: true,
+        strictBooleans: true,
+        earlyReturn: true,
+        symfonyConfigs: true,
+        codingStyle: true
     );

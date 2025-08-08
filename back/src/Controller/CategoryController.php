@@ -23,11 +23,13 @@ class CategoryController extends AbstractController
         private readonly MessageBusInterface $commandBus
     ) {
     }
+
     #[Route('/api/categories', name: 'categories_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         return $this->jsonSuccessResponse($this->categoryRepository->findAll());
     }
+
     #[Route('/api/categories/{id}', name: 'categories_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
@@ -39,6 +41,7 @@ class CategoryController extends AbstractController
 
         return $this->jsonSuccessResponse($category);
     }
+
     #[Route('/api/categories', name: 'categories_create', methods: ['POST'])]
     public function create(): JsonResponse
     {
@@ -56,6 +59,7 @@ class CategoryController extends AbstractController
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
+
     #[Route('/api/categories/{id}', name: 'categories_update', methods: ['PUT'])]
     public function update(int $id): JsonResponse
     {
@@ -72,6 +76,7 @@ class CategoryController extends AbstractController
 
         return $this->jsonSuccessResponse('Categoria atualizada com sucesso!');
     }
+
     #[Route('/api/categories/{id}', name: 'categories_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function delete(int $id): JsonResponse
     {

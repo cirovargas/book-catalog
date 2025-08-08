@@ -20,7 +20,7 @@ class AbstractController extends SymfonyAbstractController
 
         $content = (object)array_merge($content, $params);
 
-        if (!$class) {
+        if ($class === null || $class === '' || $class === '0') {
             return $content;
         }
 

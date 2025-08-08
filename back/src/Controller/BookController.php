@@ -23,11 +23,13 @@ class BookController extends AbstractController
         private readonly MessageBusInterface $commandBus
     ) {
     }
+
     #[Route('/api/books', name: 'books_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         return $this->jsonSuccessResponse($this->bookRepository->findAll());
     }
+
     #[Route('/api/books/{id}', name: 'books_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
@@ -39,6 +41,7 @@ class BookController extends AbstractController
 
         return $this->jsonSuccessResponse($book);
     }
+
     #[Route('/api/books', name: 'books_create', methods: ['POST'])]
     public function create(): JsonResponse
     {
@@ -56,6 +59,7 @@ class BookController extends AbstractController
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
+
     #[Route('/api/books/{id}', name: 'books_update', methods: ['PUT'])]
     public function update(int $id): JsonResponse
     {
@@ -72,6 +76,7 @@ class BookController extends AbstractController
 
         return $this->jsonSuccessResponse('Livro atualizado com sucesso!');
     }
+
     #[Route('/api/books/{id}', name: 'books_delete', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {

@@ -12,6 +12,7 @@ class BookRepository extends ServiceEntityRepository implements BookRepositoryIn
     {
         return $this->find($id);
     }
+
     public function getEntityClassName(): string
     {
         return Book::class;

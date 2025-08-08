@@ -20,6 +20,7 @@ class CreateAuthorHandler
         if ($command->getName() == null) {
             throw new AuthorNameRequiredException();
         }
+
         $author = $this->authorFactory->create($command->getName());
         $this->authorRepository->save($author);
     }

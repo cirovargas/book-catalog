@@ -23,11 +23,13 @@ class AuthorController extends AbstractController
         private readonly MessageBusInterface $commandBus
     ) {
     }
+
     #[Route('/api/authors', name: 'authors_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
         return $this->jsonSuccessResponse($this->authorRepository->findAll());
     }
+
     #[Route('/api/authors/{id}', name: 'authors_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
@@ -39,6 +41,7 @@ class AuthorController extends AbstractController
 
         return $this->jsonSuccessResponse($author);
     }
+
     #[Route('/api/authors', name: 'authors_create', methods: ['POST'])]
     public function create(): JsonResponse
     {
@@ -53,6 +56,7 @@ class AuthorController extends AbstractController
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
+
     #[Route('/api/authors/{id}', name: 'authors_update', methods: ['PUT'])]
     public function update(int $id): JsonResponse
     {
@@ -69,6 +73,7 @@ class AuthorController extends AbstractController
 
         return $this->jsonSuccessResponse('Autor atualizado com sucesso!');
     }
+
     #[Route('/api/authors/{id}', name: 'authors_delete', methods: ['DELETE'])]
     public function delete(int $id): JsonResponse
     {

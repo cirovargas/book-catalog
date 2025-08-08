@@ -24,10 +24,12 @@ class ReleaseRecordedEventsMiddleware implements MiddlewareInterface
             $this->eventRecorder->eraseEvents();
             throw $exception;
         }
+
         $recordedEvents = $this->eventRecorder->releaseEvents();
         foreach ($recordedEvents as $event) {
             $this->eventDispatcher->dispatch($event);
         }
+
         return $envelope;
     }
 }

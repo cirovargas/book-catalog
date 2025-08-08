@@ -25,6 +25,7 @@ class ServiceEntityRepository extends BaseServiceEntityRepository implements Bas
                     $object::class
                 );
             }
+
             throw new InvalidArgumentException($exceptionMessage);
         }
 
@@ -43,8 +44,10 @@ class ServiceEntityRepository extends BaseServiceEntityRepository implements Bas
                     $object::class
                 );
             }
+
             throw new InvalidArgumentException($exceptionMessage);
         }
+
         $this->getEntityManager()->remove($object);
         $this->getEntityManager()->flush();
     }
