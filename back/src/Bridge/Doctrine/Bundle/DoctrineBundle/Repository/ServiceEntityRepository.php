@@ -16,13 +16,13 @@ class ServiceEntityRepository extends BaseServiceEntityRepository implements Bas
 
     public function save($object): void
     {
-        if (!is_object($object) || false === strstr(get_class($object), $this->getClassName())) {
+        if (!is_object($object) || !str_contains($object::class, $this->getClassName())) {
             $exceptionMessage = sprintf('expects %s object, %s given', $this->getClassName(), gettype($object));
             if (is_object($object)) {
                 $exceptionMessage = sprintf(
                     'expects %s object, %s given',
                     $this->getClassName(),
-                    get_class($object)
+                    $object::class
                 );
             }
             throw new InvalidArgumentException($exceptionMessage);
@@ -34,13 +34,13 @@ class ServiceEntityRepository extends BaseServiceEntityRepository implements Bas
 
     public function delete($object): void
     {
-        if (!is_object($object) || false === strstr(get_class($object), $this->getClassName())) {
+        if (!is_object($object) || !str_contains($object::class, $this->getClassName())) {
             $exceptionMessage = sprintf('expects %s object, %s given', $this->getClassName(), gettype($object));
             if (is_object($object)) {
                 $exceptionMessage = sprintf(
                     'expects %s object, %s given',
                     $this->getClassName(),
-                    get_class($object)
+                    $object::class
                 );
             }
             throw new InvalidArgumentException($exceptionMessage);

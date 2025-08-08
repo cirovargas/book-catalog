@@ -4,9 +4,9 @@ namespace App\Entity;
 
 class BooksByAuthor
 {
-    private int $authorId;
+    private readonly int $authorId;
 
-    private string $authorName;
+    private readonly string $authorName;
 
     private ?string $bookTitles = null;
 

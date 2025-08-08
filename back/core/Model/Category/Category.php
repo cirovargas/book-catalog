@@ -4,16 +4,13 @@ namespace DDD\Model\Category;
 
 class Category
 {
-    protected ?int $id;
+    protected ?int $id = null;
 
     protected string $name;
 
-    protected ?string $description;
-
-    public function __construct(string $name, ?string $description = null)
+    public function __construct(string $name, protected ?string $description = null)
     {
         $this->name = trim($name);
-        $this->description = $description;
     }
 
     public function getId(): ?int

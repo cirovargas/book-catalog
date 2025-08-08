@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace DDD\Application\ValueObject;
 
-class StorageFile
+class StorageFile implements \Stringable
 {
-    private $pathname;
-
-    private $filename;
-
-    public function __construct(string $pathname, string $filename)
+    public function __construct(private readonly string $pathname, private readonly string $filename)
     {
-        $this->pathname = $pathname;
-        $this->filename = $filename;
     }
 
     public function __toString(): string

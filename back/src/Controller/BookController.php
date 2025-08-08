@@ -54,9 +54,9 @@ class BookController extends AbstractController
                 'Livro cadastrado com sucesso!',
                 Response::HTTP_CREATED
             );
-        } catch (BookTitleRequiredException $exception) {
+        } catch (BookTitleRequiredException) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
-        } catch (BadJsonBodyException $exception) {
+        } catch (BadJsonBodyException) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
@@ -67,11 +67,11 @@ class BookController extends AbstractController
         try {
             $command = $this->getRequestContent(UpdateBookCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
-        } catch (BookTitleRequiredException $exception) {
+        } catch (BookTitleRequiredException) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
-        } catch (BookNotFoundException $exception) {
+        } catch (BookNotFoundException) {
             return $this->jsonNotFoundResponse('O livro não foi encontrado');
-        } catch (BadJsonBodyException $exception) {
+        } catch (BadJsonBodyException) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
 
@@ -84,7 +84,7 @@ class BookController extends AbstractController
         try {
             $command = new DeleteBookCommand($id);
             $this->commandBus->dispatch($command);
-        } catch (BookNotFoundException $exception) {
+        } catch (BookNotFoundException) {
             return $this->jsonNotFoundResponse('O livro não foi encontrado');
         }
 

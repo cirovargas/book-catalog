@@ -4,18 +4,15 @@ namespace DDD\Model\Subject;
 
 class Subject
 {
-    protected ?int $id;
-
-    protected string $description;
+    protected ?int $id = null;
 
     /*
      * @var DDD\Model\Book\Book[]
      */
     protected iterable $books;
 
-    public function __construct(string $description)
+    public function __construct(protected string $description)
     {
-        $this->description = $description;
     }
 
     public function getId(): ?int

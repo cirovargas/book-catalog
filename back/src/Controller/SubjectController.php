@@ -54,9 +54,9 @@ class SubjectController extends AbstractController
                 'Assunto cadastrado com sucesso!',
                 Response::HTTP_CREATED
             );
-        } catch (SubjectDescriptionRequiredException $exception) {
+        } catch (SubjectDescriptionRequiredException) {
             return $this->jsonErrorResponse('O campo descrição é obrigatório');
-        } catch (BadJsonBodyException $exception) {
+        } catch (BadJsonBodyException) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
@@ -67,11 +67,11 @@ class SubjectController extends AbstractController
         try {
             $command = $this->getRequestContent(UpdateSubjectCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
-        } catch (SubjectDescriptionRequiredException $exception) {
+        } catch (SubjectDescriptionRequiredException) {
             return $this->jsonErrorResponse('O campo descrição é obrigatório');
-        } catch (SubjectNotFoundException $exception) {
+        } catch (SubjectNotFoundException) {
             return $this->jsonNotFoundResponse('O assunto não foi encontrado');
-        } catch (BadJsonBodyException $exception) {
+        } catch (BadJsonBodyException) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
 
@@ -84,7 +84,7 @@ class SubjectController extends AbstractController
         try {
             $command = new DeleteSubjectCommand($id);
             $this->commandBus->dispatch($command);
-        } catch (SubjectNotFoundException $exception) {
+        } catch (SubjectNotFoundException) {
             return $this->jsonNotFoundResponse('O assunto não foi encontrado');
         }
 

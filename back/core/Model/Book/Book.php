@@ -4,44 +4,10 @@ namespace DDD\Model\Book;
 
 class Book
 {
-    protected ?int $id;
+    protected ?int $id = null;
 
-    protected string $title;
-
-    protected int $edition;
-
-    protected string $publishYear;
-
-    protected int $price;
-
-    protected string $publisher;
-
-    /*
-     * @var DDD\Model\Subject\Subject[]
-     */
-    protected iterable $subjects;
-
-    /*
-     * @var DDD\Model\Author\Author[]
-     */
-    protected iterable $authors;
-
-    public function __construct(
-        string $title,
-        int $edition,
-        string $publishYear,
-        int $price,
-        string $publisher,
-        iterable $subjects,
-        iterable $authors
-    ) {
-        $this->title = $title;
-        $this->edition = $edition;
-        $this->publishYear = $publishYear;
-        $this->price = $price;
-        $this->publisher = $publisher;
-        $this->subjects = $subjects;
-        $this->authors = $authors;
+    public function __construct(protected string $title, protected int $edition, protected string $publishYear, protected int $price, protected string $publisher, protected iterable $subjects, protected iterable $authors)
+    {
     }
 
     public function update(

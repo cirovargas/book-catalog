@@ -6,16 +6,13 @@ class Author
 {
     protected ?int $id = null;
 
-    protected string $name;
-
     /*
      * @var DDD\Model\Book\Book[]
      */
     protected iterable $books;
 
-    public function __construct(string $name)
+    public function __construct(protected string $name)
     {
-        $this->name = $name;
     }
 
     public function getId(): ?int

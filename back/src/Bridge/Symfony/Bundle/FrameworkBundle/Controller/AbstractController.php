@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AbstractController extends SymfonyAbstractController
 {
-    protected function getRequestContent(string $class = null, array $params = []): object
+    protected function getRequestContent(?string $class = null, array $params = []): object
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
-        $content = json_decode($request->getContent(), true);
+        $content = json_decode((string) $request->getContent(), true);
 
         if (!$content) {
             throw new BadJsonBodyException();
@@ -27,7 +27,7 @@ class AbstractController extends SymfonyAbstractController
         try {
             $object = $this->container->get('serializer')->deserialize(json_encode($content), $class, 'json');
             return $object;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw new BadJsonBodyException();
         }
     }

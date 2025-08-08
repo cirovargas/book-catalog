@@ -4,15 +4,9 @@ namespace DDD\Model\User;
 
 class User
 {
-    protected ?int $id;
+    protected ?int $id = null;
 
-    protected string $email;
-
-    protected string $password;
-
-    public function __construct(string $email, string $password)
+    public function __construct(protected string $email, protected string $password)
     {
-        $this->email = $email;
-        $this->password = $password;
     }
 }

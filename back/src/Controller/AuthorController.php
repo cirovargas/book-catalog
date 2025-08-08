@@ -51,9 +51,9 @@ class AuthorController extends AbstractController
             $this->commandBus->dispatch($command);
 
             return $this->jsonSuccessResponse('Autor cadastrado com sucesso!', Response::HTTP_CREATED);
-        } catch (AuthorNameRequiredException $exception) {
+        } catch (AuthorNameRequiredException) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
-        } catch (BadJsonBodyException $exception) {
+        } catch (BadJsonBodyException) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
@@ -64,11 +64,11 @@ class AuthorController extends AbstractController
         try {
             $command = $this->getRequestContent(UpdateAuthorCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
-        } catch (AuthorNameRequiredException $exception) {
+        } catch (AuthorNameRequiredException) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
-        } catch (AuthorNotFoundException $exception) {
+        } catch (AuthorNotFoundException) {
             return $this->jsonNotFoundResponse('O autor não foi encontrado');
-        } catch (BadJsonBodyException $exception) {
+        } catch (BadJsonBodyException) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
 
@@ -81,7 +81,7 @@ class AuthorController extends AbstractController
         try {
             $command = new DeleteAuthorCommand($id);
             $this->commandBus->dispatch($command);
-        } catch (AuthorNotFoundException $exception) {
+        } catch (AuthorNotFoundException) {
             return $this->jsonNotFoundResponse('O autor não foi encontrado');
         }
 

@@ -54,9 +54,9 @@ class CategoryController extends AbstractController
                 'Categoria cadastrada com sucesso!',
                 Response::HTTP_CREATED
             );
-        } catch (CategoryNameRequiredException $exception) {
+        } catch (CategoryNameRequiredException) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
-        } catch (BadJsonBodyException $exception) {
+        } catch (BadJsonBodyException) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
     }
@@ -67,11 +67,11 @@ class CategoryController extends AbstractController
         try {
             $command = $this->getRequestContent(UpdateCategoryCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
-        } catch (CategoryNameRequiredException $exception) {
+        } catch (CategoryNameRequiredException) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
-        } catch (CategoryNotFoundException $exception) {
+        } catch (CategoryNotFoundException) {
             return $this->jsonNotFoundResponse('A categoria não foi encontrada');
-        } catch (BadJsonBodyException $exception) {
+        } catch (BadJsonBodyException) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
 
@@ -84,7 +84,7 @@ class CategoryController extends AbstractController
         try {
             $command = new DeleteCategoryCommand($id);
             $this->commandBus->dispatch($command);
-        } catch (CategoryNotFoundException $exception) {
+        } catch (CategoryNotFoundException) {
             return $this->jsonNotFoundResponse('A categoria não foi encontrada');
         }
 
