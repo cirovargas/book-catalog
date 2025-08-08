@@ -6,6 +6,9 @@ use App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository
 use App\Entity\Book;
 use DDD\Model\Book\Repository\BookRepositoryInterface;
 
+/**
+ * @method Book|null find($id, $lockMode = null, $lockVersion = null)
+ */
 class BookRepository extends ServiceEntityRepository implements BookRepositoryInterface
 {
     public function get(int $id): ?Book

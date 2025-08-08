@@ -10,6 +10,11 @@ use DDD\Model\Book\Book as ModelBook;
 
 class BookFactory implements BookFactoryInterface
 {
+
+    /**
+     * @param array<\App\Entity\Author> $authors
+     * @param array<\App\Entity\Subject> $subjects
+     */
     public function create(
         string $title,
         int $edition,
