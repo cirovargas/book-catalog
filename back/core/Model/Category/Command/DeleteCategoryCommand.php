@@ -5,7 +5,7 @@ namespace DDD\Model\Category\Command;
 class DeleteCategoryCommand
 {
     public function __construct(
-        private readonly int $id
+        private readonly int $id,
     ) {
     }
 

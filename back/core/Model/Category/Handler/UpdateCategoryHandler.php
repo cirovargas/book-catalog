@@ -10,7 +10,7 @@ use DDD\Model\Category\Repository\CategoryRepositoryInterface;
 class UpdateCategoryHandler
 {
     public function __construct(
-        private readonly CategoryRepositoryInterface $categoryRepository
+        private readonly CategoryRepositoryInterface $categoryRepository,
     ) {
     }
 
@@ -18,11 +18,11 @@ class UpdateCategoryHandler
     {
         $category = $this->categoryRepository->find($command->getId());
 
-        if ($category === null) {
+        if (null === $category) {
             throw new CategoryNotFoundException();
         }
 
-        if ($command->getName() == null || trim($command->getName()) === '') {
+        if (null == $command->getName() || '' === trim($command->getName())) {
             throw new CategoryNameRequiredException();
         }
 

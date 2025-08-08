@@ -7,6 +7,7 @@ use DDD\Application\Repository\AbstractRepository;
 
 /**
  * @extends AbstractRepository<Category>
+ *
  * @template-extends AbstractRepository<Category>
  */
 interface CategoryRepositoryInterface extends AbstractRepository

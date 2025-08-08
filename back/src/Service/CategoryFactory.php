@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Category;
-use DDD\Model\Category\Service\CategoryFactory as CategoryFactoryInterface;
 use DDD\Model\Category\Category as ModelCategory;
+use DDD\Model\Category\Service\CategoryFactory as CategoryFactoryInterface;
 
 class CategoryFactory implements CategoryFactoryInterface
 {

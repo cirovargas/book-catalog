@@ -3,15 +3,15 @@
 namespace App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository;
 
 use DDD\Application\Repository\AbstractRepository as BaseAbstractRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository as BaseServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 
-
 /**
- * @inheritDoc
  * @template T of object
+ *
  * @template-extends BaseServiceEntityRepository<T>
+ *
  * @template-implements BaseAbstractRepository<T>
  */
 abstract class ServiceEntityRepository extends BaseServiceEntityRepository implements BaseAbstractRepository
@@ -24,7 +24,7 @@ abstract class ServiceEntityRepository extends BaseServiceEntityRepository imple
     /**
      * @return class-string<T>
      */
-    abstract function getEntityClassName(): string;
+    abstract public function getEntityClassName(): string;
 
     /**
      * @param T $object

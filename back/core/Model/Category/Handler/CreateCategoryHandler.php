@@ -11,13 +11,13 @@ class CreateCategoryHandler
 {
     public function __construct(
         private readonly CategoryRepositoryInterface $categoryRepository,
-        private readonly CategoryFactory $categoryFactory
+        private readonly CategoryFactory $categoryFactory,
     ) {
     }
 
     public function __invoke(CreateCategoryCommand $command): void
     {
-        if ($command->getName() == null || trim($command->getName()) === '') {
+        if (null == $command->getName() || '' === trim($command->getName())) {
             throw new CategoryNameRequiredException();
         }
 

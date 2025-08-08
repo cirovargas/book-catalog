@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DDD\Model\User\User as BaseModel;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use DDD\Model\User\User as BaseModel;
 
 class User extends BaseModel implements UserInterface, PasswordAuthenticatedUserInterface
 {

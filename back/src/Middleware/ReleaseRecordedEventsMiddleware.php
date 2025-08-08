@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use DDD\Application\Event\EventRecorder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Messenger\Middleware\StackInterface;
@@ -14,7 +14,7 @@ class ReleaseRecordedEventsMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly EventRecorder $eventRecorder,
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

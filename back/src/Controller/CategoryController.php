@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Bridge\Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Exception\BadJsonBodyException;
 use DDD\Model\Category\Command\CreateCategoryCommand;
 use DDD\Model\Category\Command\DeleteCategoryCommand;
@@ -9,19 +10,17 @@ use DDD\Model\Category\Command\UpdateCategoryCommand;
 use DDD\Model\Category\Exception\CategoryNameRequiredException;
 use DDD\Model\Category\Exception\CategoryNotFoundException;
 use DDD\Model\Category\Repository\CategoryRepositoryInterface;
-use App\Bridge\Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
 class CategoryController extends AbstractController
 {
     public function __construct(
         private readonly CategoryRepositoryInterface $categoryRepository,
-        private readonly MessageBusInterface $commandBus
+        private readonly MessageBusInterface $commandBus,
     ) {
     }
 
@@ -36,7 +35,7 @@ class CategoryController extends AbstractController
     {
         $category = $this->categoryRepository->find($id);
 
-        if ($category === null) {
+        if (null === $category) {
             return $this->jsonNotFoundResponse('Categoria não encontrada');
         }
 

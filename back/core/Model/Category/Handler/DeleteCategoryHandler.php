@@ -9,7 +9,7 @@ use DDD\Model\Category\Repository\CategoryRepositoryInterface;
 class DeleteCategoryHandler
 {
     public function __construct(
-        private readonly CategoryRepositoryInterface $categoryRepository
+        private readonly CategoryRepositoryInterface $categoryRepository,
     ) {
     }
 
@@ -17,7 +17,7 @@ class DeleteCategoryHandler
     {
         $category = $this->categoryRepository->find($command->getId());
 
-        if ($category === null) {
+        if (null === $category) {
             throw new CategoryNotFoundException();
         }
 

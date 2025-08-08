@@ -6,7 +6,7 @@ class CreateCategoryCommand
 {
     public function __construct(
         private readonly string $name,
-        private readonly ?string $description = null
+        private readonly ?string $description = null,
     ) {
     }
 

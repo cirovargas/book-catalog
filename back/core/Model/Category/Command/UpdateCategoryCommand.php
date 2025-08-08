@@ -7,7 +7,7 @@ class UpdateCategoryCommand
     public function __construct(
         private readonly int $id,
         private readonly string $name,
-        private readonly ?string $description = null
+        private readonly ?string $description = null,
     ) {
     }
 

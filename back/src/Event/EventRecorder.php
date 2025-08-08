@@ -18,6 +18,7 @@ class EventRecorder implements EventRecorderInterface
     {
         $events = $this->recordedEvents;
         $this->eraseEvents();
+
         return $events;
     }
 
