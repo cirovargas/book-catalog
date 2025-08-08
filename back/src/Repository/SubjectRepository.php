@@ -6,9 +6,6 @@ use App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository
 use App\Entity\Subject;
 use DDD\Model\Subject\Repository\SubjectRepositoryInterface;
 
-/**
- * @method Subject|null find($id, $lockMode = null, $lockVersion = null)
- */
 class SubjectRepository extends ServiceEntityRepository implements SubjectRepositoryInterface
 {
     public function get(int $id): ?Subject
