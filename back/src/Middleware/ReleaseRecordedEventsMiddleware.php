@@ -12,8 +12,10 @@ use Symfony\Component\Messenger\Middleware\StackInterface;
 
 class ReleaseRecordedEventsMiddleware implements MiddlewareInterface
 {
-    public function __construct(private readonly EventRecorder $eventRecorder, private readonly EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        private readonly EventRecorder $eventRecorder,
+        private readonly EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     public function handle(Envelope $envelope, StackInterface $stack): Envelope

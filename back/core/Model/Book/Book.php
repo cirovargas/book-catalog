@@ -6,8 +6,15 @@ class Book
 {
     protected ?int $id = null;
 
-    public function __construct(protected string $title, protected int $edition, protected string $publishYear, protected int $price, protected string $publisher, protected iterable $subjects, protected iterable $authors)
-    {
+    public function __construct(
+        protected string $title,
+        protected int $edition,
+        protected string $publishYear,
+        protected int $price,
+        protected string $publisher,
+        protected iterable $subjects,
+        protected iterable $authors
+    ) {
     }
 
     public function update(
