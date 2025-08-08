@@ -5,7 +5,7 @@ namespace App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository;
 use DDD\Application\Repository\AbstractRepository as BaseAbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository as BaseServiceEntityRepository;
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 class ServiceEntityRepository extends BaseServiceEntityRepository implements BaseAbstractRepository
 {
