@@ -17,7 +17,7 @@ class UpdateAuthorHandler
     public function __invoke(UpdateAuthorCommand $command): void
     {
         $author = $this->authorRepository->find($command->getId());
-        
+
         if ($author === null) {
             throw new AuthorNotFoundException();
         }
@@ -25,8 +25,8 @@ class UpdateAuthorHandler
         if ($command->getName() == null) {
             throw new AuthorNameRequiredException();
         }
-        
+
         $author->setName($command->getName());
         $this->authorRepository->save($author);
     }
-} 
+}

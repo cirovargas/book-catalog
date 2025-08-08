@@ -10,4 +10,4 @@ interface AuthorRepositoryInterface extends AbstractRepository
     public function get(int $id): ?Author;
 
     public function getByIds(array $ids): iterable;
-} 
+}

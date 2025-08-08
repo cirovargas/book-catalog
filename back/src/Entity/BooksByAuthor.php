@@ -31,5 +31,4 @@ class BooksByAuthor
     {
         return $this->subjects;
     }
-
 }

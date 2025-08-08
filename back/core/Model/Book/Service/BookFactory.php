@@ -15,5 +15,4 @@ interface BookFactory
         iterable $subjects,
         iterable $authors
     ): Book;
-
 }

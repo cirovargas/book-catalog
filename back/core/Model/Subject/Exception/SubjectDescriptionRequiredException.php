@@ -2,7 +2,6 @@
 
 namespace DDD\Model\Subject\Exception;
 
-class SubjectDescriptionRequiredException extends  \DomainException
+class SubjectDescriptionRequiredException extends \DomainException
 {
-
 }

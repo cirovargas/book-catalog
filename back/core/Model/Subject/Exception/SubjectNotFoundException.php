@@ -2,7 +2,6 @@
 
 namespace DDD\Model\Subject\Exception;
 
-class SubjectNotFoundException extends  \DomainException
+class SubjectNotFoundException extends \DomainException
 {
-
 }

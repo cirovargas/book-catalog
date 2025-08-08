@@ -13,4 +13,4 @@ class DeleteBookCommand
     {
         return $this->id;
     }
-} 
+}

@@ -36,7 +36,7 @@ class UpdateBookHandler
             $subjects,
             $authors
         );
-        
+
         $this->bookRepository->save($book);
     }
-} 
+}

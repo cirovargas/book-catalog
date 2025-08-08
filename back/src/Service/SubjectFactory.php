@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -13,5 +14,4 @@ class SubjectFactory implements SubjectFactoryInterface
     {
         return new Subject($description);
     }
-
 }

@@ -1,0 +1,33 @@
+<?php
+
+namespace DDD\Model\Category\Handler;
+
+use DDD\Model\Category\Command\UpdateCategoryCommand;
+use DDD\Model\Category\Exception\CategoryNameRequiredException;
+use DDD\Model\Category\Exception\CategoryNotFoundException;
+use DDD\Model\Category\Repository\CategoryRepositoryInterface;
+
+class UpdateCategoryHandler
+{
+    public function __construct(
+        private readonly CategoryRepositoryInterface $categoryRepository
+    ) {
+    }
+
+    public function __invoke(UpdateCategoryCommand $command): void
+    {
+        $category = $this->categoryRepository->find($command->getId());
+
+        if ($category === null) {
+            throw new CategoryNotFoundException();
+        }
+
+        if ($command->getName() == null || trim($command->getName()) === '') {
+            throw new CategoryNameRequiredException();
+        }
+
+        $category->setName($command->getName());
+        $category->setDescription($command->getDescription());
+        $this->categoryRepository->save($category);
+    }
+}

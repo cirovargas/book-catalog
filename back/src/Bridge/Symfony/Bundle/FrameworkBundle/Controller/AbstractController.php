@@ -30,7 +30,6 @@ class AbstractController extends SymfonyAbstractController
         } catch (\Exception $e) {
             throw new BadJsonBodyException();
         }
-
     }
 
     protected function jsonSuccessResponse(
@@ -43,7 +42,10 @@ class AbstractController extends SymfonyAbstractController
             [
             'success' => true,
             'data' => $data
-            ], $status, $headers, $context
+            ],
+            $status,
+            $headers,
+            $context
         );
     }
 
@@ -57,7 +59,10 @@ class AbstractController extends SymfonyAbstractController
             [
             'success' => false,
             'error' => $message,
-            ], $status, $headers, $context
+            ],
+            $status,
+            $headers,
+            $context
         );
     }
 
@@ -71,7 +76,10 @@ class AbstractController extends SymfonyAbstractController
             [
             'success' => false,
             'error' => $message,
-            ], $status, $headers, $context
+            ],
+            $status,
+            $headers,
+            $context
         );
     }
 }

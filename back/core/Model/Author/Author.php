@@ -2,7 +2,6 @@
 
 namespace DDD\Model\Author;
 
-
 class Author
 {
     protected ?int $id = null;
@@ -33,6 +32,4 @@ class Author
     {
         $this->name = $name;
     }
-
-
-} 
+}

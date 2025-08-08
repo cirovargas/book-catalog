@@ -8,7 +8,6 @@ use DDD\Model\Book\Repository\BookRepositoryInterface;
 
 class BookRepository extends ServiceEntityRepository implements BookRepositoryInterface
 {
-
     public function get(int $id): ?Book
     {
         return $this->find($id);

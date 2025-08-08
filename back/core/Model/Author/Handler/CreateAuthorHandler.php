@@ -23,4 +23,4 @@ class CreateAuthorHandler
         $author = $this->authorFactory->create($command->getName());
         $this->authorRepository->save($author);
     }
-} 
+}

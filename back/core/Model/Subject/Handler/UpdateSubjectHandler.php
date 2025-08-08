@@ -17,7 +17,7 @@ class UpdateSubjectHandler
     public function __invoke(UpdateSubjectCommand $command): void
     {
         $subject = $this->subjectRepository->find($command->getId());
-        
+
         if ($subject === null) {
             throw new SubjectNotFoundException();
         }
@@ -25,8 +25,8 @@ class UpdateSubjectHandler
         if ($command->getDescription() == null) {
             throw new SubjectDescriptionRequiredException();
         }
-        
+
         $subject->setDescription($command->getDescription());
         $this->subjectRepository->save($subject);
     }
-} 
+}

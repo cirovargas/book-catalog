@@ -101,6 +101,4 @@ class Book
     {
         return $this->authors;
     }
-
-
-} 
+}

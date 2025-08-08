@@ -39,13 +39,15 @@ services:
     DDD\Application\Service\StorageService: '@App\Service\StorageService'
     DDD\Application\Event\EventRecorder: '@App\Event\EventRecorder'
     DDD\Application\Service\Mailer: '@App\Service\Mailer'
-    DDD\Application\Service\CsvReader:
-        public: true
+#    DDD\Application\Service\CsvReader:
+#        public: true
 
     DDD\Model\Book\Repository\BookRepositoryInterface: '@App\Repository\BookRepository'
     DDD\Model\Subject\Repository\SubjectRepositoryInterface: '@App\Repository\SubjectRepository'
     DDD\Model\Author\Repository\AuthorRepositoryInterface: '@App\Repository\AuthorRepository'
+    DDD\Model\Category\Repository\CategoryRepositoryInterface: '@App\Repository\CategoryRepository'
 
     DDD\Model\Subject\Service\SubjectFactory: '@App\Service\SubjectFactory'
     DDD\Model\Author\Service\AuthorFactory: '@App\Service\AuthorFactory'
     DDD\Model\Book\Service\BookFactory: '@App\Service\BookFactory'
+    DDD\Model\Category\Service\CategoryFactory: '@App\Service\CategoryFactory'

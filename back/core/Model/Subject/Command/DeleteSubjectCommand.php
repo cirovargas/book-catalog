@@ -13,4 +13,4 @@ class DeleteSubjectCommand
     {
         return $this->id;
     }
-} 
+}

@@ -16,11 +16,11 @@ class DeleteSubjectHandler
     public function __invoke(DeleteSubjectCommand $command): void
     {
         $subject = $this->subjectRepository->find($command->getId());
-        
+
         if ($subject === null) {
             throw new SubjectNotFoundException();
         }
-        
+
         $this->subjectRepository->delete($subject);
     }
-} 
+}

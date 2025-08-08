@@ -13,4 +13,4 @@ class DeleteAuthorCommand
     {
         return $this->id;
     }
-} 
+}

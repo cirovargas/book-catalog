@@ -19,4 +19,4 @@ class UpdateAuthorCommand
     {
         return $this->name;
     }
-} 
+}

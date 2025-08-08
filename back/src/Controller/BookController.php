@@ -62,16 +62,14 @@ class BookController extends AbstractController
     }
 
     #[Route('/{id}', name: 'books_update', methods: ['PUT'])]
-    public function update(int $id, Request $request): JsonResponse
+    public function update(int $id): JsonResponse
     {
         try {
-            $data = json_decode($request->getContent(), true);
-
             $command = $this->getRequestContent(UpdateBookCommand::class, ['id' => $id]);
             $this->commandBus->dispatch($command);
         } catch (BookTitleRequiredException $exception) {
             return $this->jsonErrorResponse('O campo nome é obrigatório');
-        }  catch (BookNotFoundException $exception) {
+        } catch (BookNotFoundException $exception) {
             return $this->jsonNotFoundResponse('O livro não foi encontrado');
         } catch (BadJsonBodyException $exception) {
             return $this->jsonErrorResponse('Body mal formatado');
@@ -86,10 +84,10 @@ class BookController extends AbstractController
         try {
             $command = new DeleteBookCommand($id);
             $this->commandBus->dispatch($command);
-        }  catch (BookNotFoundException $exception) {
+        } catch (BookNotFoundException $exception) {
             return $this->jsonNotFoundResponse('O livro não foi encontrado');
         }
 
         return $this->jsonSuccessResponse('Livro excluído com sucesso!');
     }
-} 
+}

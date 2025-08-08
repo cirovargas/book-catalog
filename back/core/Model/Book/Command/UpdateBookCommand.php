@@ -61,4 +61,4 @@ class UpdateBookCommand
     {
         return $this->authorIds;
     }
-} 
+}

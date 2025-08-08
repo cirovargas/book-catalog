@@ -35,11 +35,11 @@ class SubjectController extends AbstractController
     public function show(int $id): JsonResponse
     {
         $subject = $this->subjectRepository->find($id);
-        
+
         if ($subject === null) {
             return $this->jsonNotFoundResponse('Assunto não encontrado');
         }
-        
+
         return $this->jsonSuccessResponse($subject);
     }
 
@@ -69,12 +69,12 @@ class SubjectController extends AbstractController
             $this->commandBus->dispatch($command);
         } catch (SubjectDescriptionRequiredException $exception) {
             return $this->jsonErrorResponse('O campo descrição é obrigatório');
-        }  catch (SubjectNotFoundException $exception) {
+        } catch (SubjectNotFoundException $exception) {
             return $this->jsonNotFoundResponse('O assunto não foi encontrado');
         } catch (BadJsonBodyException $exception) {
             return $this->jsonErrorResponse('Body mal formatado');
         }
-        
+
         return $this->jsonSuccessResponse('Assunto atualizado com sucesso!');
     }
 
@@ -84,10 +84,10 @@ class SubjectController extends AbstractController
         try {
             $command = new DeleteSubjectCommand($id);
             $this->commandBus->dispatch($command);
-        }  catch (SubjectNotFoundException $exception) {
+        } catch (SubjectNotFoundException $exception) {
             return $this->jsonNotFoundResponse('O assunto não foi encontrado');
         }
 
         return $this->jsonSuccessResponse('Assunto excluído com sucesso!');
     }
-} 
+}

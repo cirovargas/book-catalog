@@ -2,7 +2,6 @@
 
 namespace DDD\Model\Book\Exception;
 
-class BookTitleRequiredException extends  \DomainException
+class BookTitleRequiredException extends \DomainException
 {
-
 }

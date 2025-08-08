@@ -55,4 +55,4 @@ class CreateBookCommand
     {
         return $this->authorIds;
     }
-} 
+}

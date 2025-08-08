@@ -8,7 +8,6 @@ use DDD\Model\Author\Repository\AuthorRepositoryInterface;
 
 class AuthorRepository extends ServiceEntityRepository implements AuthorRepositoryInterface
 {
-
     public function get(int $id): ?Author
     {
         return $this->find($id);
@@ -23,5 +22,4 @@ class AuthorRepository extends ServiceEntityRepository implements AuthorReposito
     {
         return $this->findBy(['id' => $ids]);
     }
-
-} 
+}

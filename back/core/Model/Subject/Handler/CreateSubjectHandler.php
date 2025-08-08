@@ -24,4 +24,4 @@ class CreateSubjectHandler
         $subject = $this->subjectFactory->create($command->getDescription());
         $this->subjectRepository->save($subject);
     }
-} 
+}

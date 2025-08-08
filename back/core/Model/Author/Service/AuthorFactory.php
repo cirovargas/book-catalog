@@ -7,5 +7,4 @@ use DDD\Model\Author\Author;
 interface AuthorFactory
 {
     public function create(string $name): Author;
-
 }

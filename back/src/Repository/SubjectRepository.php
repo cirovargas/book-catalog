@@ -21,5 +21,4 @@ class SubjectRepository extends ServiceEntityRepository implements SubjectReposi
     {
         return $this->findBy(['id' => $ids]);
     }
-
-} 
+}

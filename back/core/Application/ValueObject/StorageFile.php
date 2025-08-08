@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace DDD\Application\ValueObject;
 
 class StorageFile
 {
-
     private $pathname;
 
     private $filename;
@@ -35,5 +35,4 @@ class StorageFile
     {
         return $this->pathname === $file->pathname && $this->filename === $file->filename;
     }
-
 }

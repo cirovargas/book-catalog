@@ -19,6 +19,8 @@ RUN chmod +x /usr/local/bin/install-php-extensions  \
       pdo_pgsql \
       pcntl \
       zip \
+      pcov \
+      xdebug \
       sockets \
       @composer \
     && curl -sS https://get.symfony.com/cli/installer | bash \

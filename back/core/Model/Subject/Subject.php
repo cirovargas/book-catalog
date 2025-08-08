@@ -32,6 +32,4 @@ class Subject
     {
         return $this->description;
     }
-
-
 }

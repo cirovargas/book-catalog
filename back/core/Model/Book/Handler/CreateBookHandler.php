@@ -9,7 +9,6 @@ use DDD\Model\Book\Repository\BookRepositoryInterface;
 use DDD\Model\Book\Service\BookFactory;
 use DDD\Model\Subject\Repository\SubjectRepositoryInterface;
 
-
 class CreateBookHandler
 {
     public function __construct(

@@ -16,11 +16,11 @@ class DeleteBookHandler
     public function __invoke(DeleteBookCommand $command): void
     {
         $book = $this->bookRepository->find($command->getId());
-        
+
         if ($book === null) {
             throw new BookNotFoundException();
         }
-        
+
         $this->bookRepository->delete($book);
     }
-} 
+}

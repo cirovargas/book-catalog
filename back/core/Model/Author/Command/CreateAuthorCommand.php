@@ -13,4 +13,4 @@ class CreateAuthorCommand
     {
         return $this->name;
     }
-} 
+}

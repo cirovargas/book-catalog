@@ -6,6 +6,7 @@ namespace App\Event;
 
 use DDD\Application\Event\Event;
 use DDD\Application\Event\EventRecorder as EventRecorderInterface;
+
 class EventRecorder implements EventRecorderInterface
 {
     /**
