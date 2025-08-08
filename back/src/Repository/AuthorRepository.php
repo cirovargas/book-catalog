@@ -6,6 +6,9 @@ use App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository
 use App\Entity\Author;
 use DDD\Model\Author\Repository\AuthorRepositoryInterface;
 
+/**
+ * @extends ServiceEntityRepository<Author>
+ */
 class AuthorRepository extends ServiceEntityRepository implements AuthorRepositoryInterface
 {
     public function get(int $id): ?Author

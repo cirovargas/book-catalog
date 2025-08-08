@@ -6,6 +6,9 @@ use App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository
 use App\Entity\Subject;
 use DDD\Model\Subject\Repository\SubjectRepositoryInterface;
 
+/**
+ * @extends ServiceEntityRepository<Subject>
+ */
 class SubjectRepository extends ServiceEntityRepository implements SubjectRepositoryInterface
 {
     public function get(int $id): ?Subject

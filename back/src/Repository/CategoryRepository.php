@@ -6,6 +6,9 @@ use App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository
 use App\Entity\Category;
 use DDD\Model\Category\Repository\CategoryRepositoryInterface;
 
+/**
+ * @extends ServiceEntityRepository<Category>
+ */
 class CategoryRepository extends ServiceEntityRepository implements CategoryRepositoryInterface
 {
     public function get(int $id): ?Category

@@ -43,5 +43,5 @@ return RectorConfig::configure()
         \Rector\TypeDeclaration\Rector\ClassMethod\AddParamArrayDocblockBasedOnCallableNativeFuncCallRector::class,
         \Rector\TypeDeclaration\Rector\ClassMethod\AddReturnArrayDocblockBasedOnArrayMapRector::class,
         \Rector\Doctrine\TypedCollections\Rector\Class_\CompleteParamDocblockFromSetterToCollectionRector::class,
-        \Utils\Rector\Rector\AddAnnotationToRepositoryRector::class
+        \Utils\Rector\AddAnnotationToServiceEntityRepositoryRector::class
     ]);
