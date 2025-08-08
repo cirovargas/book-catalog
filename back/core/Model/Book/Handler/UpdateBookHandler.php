@@ -20,7 +20,7 @@ class UpdateBookHandler
     public function __invoke(UpdateBookCommand $command): void
     {
         $book = $this->bookRepository->get($command->getId());
-        if ($book === null) {
+        if (!$book instanceof \App\Entity\Book) {
             throw new BookNotFoundException();
         }
 
