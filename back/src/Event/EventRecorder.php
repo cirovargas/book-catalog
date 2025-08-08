@@ -21,12 +21,12 @@ class EventRecorder implements EventRecorderInterface
         return $events;
     }
 
-    public function eraseEvents()
+    public function eraseEvents(): void
     {
         $this->recordedEvents = [];
     }
 
-    public function record(Event $event)
+    public function record(Event $event): void
     {
         $this->recordedEvents[] = $event;
     }

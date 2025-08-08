@@ -12,14 +12,23 @@ use InvalidArgumentException;
  * @inheritDoc
  * @template T of object
  * @template-extends BaseServiceEntityRepository<T>
+ * @template-implements BaseAbstractRepository<T>
  */
-class ServiceEntityRepository extends BaseServiceEntityRepository implements BaseAbstractRepository
+abstract class ServiceEntityRepository extends BaseServiceEntityRepository implements BaseAbstractRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, $this->getEntityClassName());
     }
 
+    /**
+     * @return class-string<T>
+     */
+    abstract function getEntityClassName(): string;
+
+    /**
+     * @param T $object
+     */
     public function save($object): void
     {
         if (!is_object($object) || !str_contains($object::class, $this->getClassName())) {
@@ -39,6 +48,9 @@ class ServiceEntityRepository extends BaseServiceEntityRepository implements Bas
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @param T $object
+     */
     public function delete($object): void
     {
         if (!is_object($object) || !str_contains($object::class, $this->getClassName())) {

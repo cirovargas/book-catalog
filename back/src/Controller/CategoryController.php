@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 
 class CategoryController extends AbstractController
 {
@@ -43,10 +44,10 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/api/categories', name: 'categories_create', methods: ['POST'])]
-    public function create(): JsonResponse
-    {
+    public function create(
+        #[MapRequestPayload] CreateCategoryCommand $command,
+    ): JsonResponse {
         try {
-            $command = $this->getRequestContent(CreateCategoryCommand::class);
             $this->commandBus->dispatch($command);
 
             return $this->jsonSuccessResponse(
