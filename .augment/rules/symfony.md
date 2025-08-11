@@ -7,7 +7,7 @@
 - Design for scalability and maintainability, ensuring the system can grow with ease
 - Prefer iteration and modularization over duplication to promote code reuse
 - Use consistent and descriptive names for variables, methods, and classes to improve readability
-- Use context7
+- Use context7 to get the actual documentation and examples
 
 ## Dependencies
 - Composer for dependency management
@@ -122,13 +122,17 @@
 ### Testing
 - Write unit tests for business logic
 - Create functional tests for controllers
-- Use Panther for E2E testing
+- Use Codeception for E2E testing
 - Implement fixtures for test data
 
 ## Key Points
-- Follow Symfony's directory structure and bundle organization
+- Follow Symfony's directory structure and bundle organization, put infrastructure and application implementations in src folder and domain and application interfaces code in the core folder
 - Use dependency injection and services for business logic
 - Leverage Symfony's components effectively
 - Maintain clean and maintainable code
 - Document code thoroughly
 - Write comprehensive tests
+- For side effects, use events and message bus
+- Use Doctrine Query Builder for queries
+- For complex business logic, use domain events
+- The domain code cant use src and code from framework or libraries, use application interfaces to communicate with the domain
