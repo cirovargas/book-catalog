@@ -7,18 +7,25 @@ import { useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const { login } = useAuth()
+
   const handleLogin = async (e) => {
     e.preventDefault()
-    // Here you would usually send a request to your backend to authenticate the user
-    // For the sake of this example, we're using a mock authentication
-    if (username === 'aaa@aaa.com' && password === 'aaa') {
-      // Replace with actual authentication logic
-      await login({ username })
-    } else {
-      alert('Invalid username or password')
+    if (!email || !password) {
+      alert('Please fill in all fields')
+      return
+    }
+
+    try {
+      setIsLoading(true)
+      await login(email, password)
+    } catch (error) {
+      // Error is already handled by the login function
+    } finally {
+      setIsLoading(false)
     }
   }
   return (
@@ -38,8 +45,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                   type="email"
                   placeholder="m@example.com"
                   required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-3">
@@ -57,8 +64,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Login'}
               </Button>
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                 <span className="bg-card text-muted-foreground relative z-10 px-2">Or continue with</span>

@@ -46,6 +46,8 @@ services:
     DDD\Model\Subject\Repository\SubjectRepositoryInterface: '@App\Repository\SubjectRepository'
     DDD\Model\Author\Repository\AuthorRepositoryInterface: '@App\Repository\AuthorRepository'
     DDD\Model\Category\Repository\CategoryRepositoryInterface: '@App\Repository\CategoryRepository'
+    DDD\Model\User\Repository\UserRepositoryInterface: '@App\Repository\UserRepository'
+    DDD\Model\User\Service\UserFactory: '@App\Service\UserFactory'
 
     DDD\Model\Subject\Service\SubjectFactory: '@App\Service\SubjectFactory'
     DDD\Model\Author\Service\AuthorFactory: '@App\Service\AuthorFactory'

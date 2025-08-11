@@ -17,5 +17,5 @@ When you develop a new feature or fix a bug you need to follow these steps:
 ./vendor/bin/codecept run
 ```
 3. If any of the commands fail, you need to fix the issues and go back to step 2 and fix them
-4. Go to the frontend and test the new functionality in the browser if necessary
-4. If all the commands pass, you can commit your changes
+4. Go to the frontend and test the new functionality in the browser
+4. If all the tests pass, you can commit your changes

@@ -4,6 +4,7 @@ import type { Route } from './+types/root'
 import './app.css'
 import { AuthProvider } from '@/hooks/use-auth'
 import { ThemeProvider } from '@/components/theme-provider/theme-provider'
+import { Toaster } from 'react-hot-toast'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -41,6 +42,16 @@ export default function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <AuthProvider>
         <Outlet />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+          }}
+        />
       </AuthProvider>
     </ThemeProvider>
   )

@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
+use App\Bridge\Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use DDD\Model\User\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -12,11 +12,69 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 /**
  * @extends ServiceEntityRepository<User>
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface, PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function getEntityClassName(): string
     {
-        parent::__construct($registry, User::class);
+        return User::class;
+    }
+
+    public function get(int $id): ?User
+    {
+        return $this->find($id);
+    }
+
+    public function findByEmail(string $email): ?User
+    {
+        return $this->findOneBy(['email' => $email]);
+    }
+
+    /**
+     * @return iterable<User>
+     */
+    public function getAll(): iterable
+    {
+        return $this->findAll();
+    }
+
+    /**
+     * @return array{users: iterable<User>, total: int}
+     */
+    public function getPaginated(int $page = 1, int $limit = 10, ?string $search = null): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        if ($search !== null && $search !== '') {
+            $qb->andWhere('u.email LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        // Get total count
+        $totalQb = clone $qb;
+        $total = (int) $totalQb->select('COUNT(u.id)')->getQuery()->getSingleScalarResult();
+
+        // Get paginated results
+        $users = $qb->select('u')
+                   ->orderBy('u.id', 'DESC')
+                   ->setFirstResult(($page - 1) * $limit)
+                   ->setMaxResults($limit)
+                   ->getQuery()
+                   ->getResult();
+
+        return [
+            'users' => $users,
+            'total' => $total,
+        ];
+    }
+
+    /**
+     * @param array<int> $ids
+     *
+     * @return iterable<User>
+     */
+    public function getByIds(array $ids): iterable
+    {
+        return $this->findBy(['id' => $ids]);
     }
 
     /**

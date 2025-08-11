@@ -8,6 +8,9 @@
 - Prefer iteration and modularization over duplication to promote code reuse
 - Use consistent and descriptive names for variables, methods, and classes to improve readability
 - Use context7 to get the actual documentation and examples
+- Follow Clean code and object calisthenics principles
+- Avoid creating getters and setters when possible, priorize behavior over data
+- Use constructor to model data
 
 ## Dependencies
 - Composer for dependency management
@@ -27,6 +30,7 @@
   > Create custom exceptions when necessary
   > Employ try-catch blocks for expected exceptions
 - Use Symfony's validation component for form and request data
+  > Dont use the validation component in domain commands, validate the data in the handler
 - Implement event listeners and subscribers for cross-cutting concerns
 - Utilize Doctrine ORM for database interactions
 - Use Doctrine Query Builder for complex database operations
@@ -38,13 +42,10 @@
 - Utilize Symfony Security component for authentication and authorization
 - Leverage Symfony Cache component (Redis, Memcached) for improved performance
 - Use Messenger component for handling asynchronous tasks and message queues
-- Implement comprehensive testing using PHPUnit and Panther for unit, functional, and E2E tests
-- Use API Platform for building robust and maintainable APIs
+- Implement comprehensive testing using Codeception for unit, functional, and E2E tests
 - Implement proper error handling using Symfony's error handler and logging system
-- Utilize Symfony's validation component and form types for data integrity
 - Implement database indexing and use Doctrine's query optimization features
 - Use Symfony Profiler for debugging and performance monitoring in development
-- Leverage EasyAdmin or API Platform Admin for rapid admin panel development
 - Implement proper security measures, including CSRF protection, XSS prevention, and input sanitization
 
 ## Code Architecture
@@ -120,8 +121,8 @@
 - Optimize Doctrine queries and indexing
 
 ### Testing
-- Write unit tests for business logic
-- Create functional tests for controllers
+- Write unit tests for business logic using Codeception
+- Create functional tests for controllers using Codeception
 - Use Codeception for E2E testing
 - Implement fixtures for test data
 

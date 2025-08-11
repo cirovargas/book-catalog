@@ -11,7 +11,8 @@ import {
   Map,
   PieChart,
   Settings2,
-  SquareTerminal
+  SquareTerminal,
+  Users
 } from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main/nav-main'
@@ -19,13 +20,10 @@ import { NavProjects } from '@/components/nav-projects/nav-projects'
 import { NavUser } from '@/components/nav-user/nav-user'
 import { TeamSwitcher } from '@/components/team-switcher/team-switcher'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar'
+import { useAuth } from '@/hooks/use-auth'
+import { NavAdministration } from '@/components/nav-administration/nav-administration'
 
 const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg'
-  },
   teams: [
     {
       name: 'Acme Inc',
@@ -146,10 +144,19 @@ const data = {
       url: '#',
       icon: Map
     }
+  ],
+  administration: [
+    {
+      name: 'Users',
+      url: '/users',
+      icon: Users
+    }
   ]
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user, logout } = useAuth()
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -158,9 +165,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
+        <NavAdministration projects={data.administration} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} logout={logout} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
