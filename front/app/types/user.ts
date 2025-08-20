@@ -11,11 +11,15 @@ export interface User {
 export interface CreateUserRequest {
   email: string
   password: string
+  name?: string
+  avatar?: string
   roles?: string[]
 }
 
 export interface UpdateUserRequest {
   email: string
+  name?: string
+  avatar?: string
   roles?: string[]
   password?: string
 }

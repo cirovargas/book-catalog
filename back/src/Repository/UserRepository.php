@@ -42,19 +42,19 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
      */
     public function getPaginated(int $page = 1, int $limit = 10, ?string $search = null): array
     {
-        $qb = $this->createQueryBuilder('u');
+        $queryBuilder = $this->createQueryBuilder('u');
 
-        if ($search !== null && $search !== '') {
-            $qb->andWhere('u.email LIKE :search')
+        if (null !== $search && '' !== $search) {
+            $queryBuilder->andWhere('u.email LIKE :search')
                ->setParameter('search', '%' . $search . '%');
         }
 
         // Get total count
-        $totalQb = clone $qb;
+        $totalQb = clone $queryBuilder;
         $total = (int) $totalQb->select('COUNT(u.id)')->getQuery()->getSingleScalarResult();
 
         // Get paginated results
-        $users = $qb->select('u')
+        $users = $queryBuilder->select('u')
                    ->orderBy('u.id', 'DESC')
                    ->setFirstResult(($page - 1) * $limit)
                    ->setMaxResults($limit)

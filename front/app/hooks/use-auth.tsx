@@ -21,14 +21,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Check if user is already authenticated on app start
-    const currentUser = userService.getCurrentUser()
-    const token = userService.getToken()
-
-    if (currentUser && token) {
-      setUser(currentUser)
+    const initializeAuth = async () => {
+      try {
+        if (userService.isAuthenticated()) {
+          const currentUser = userService.getCurrentUser()
+          if (currentUser) {
+            setUser(currentUser)
+          }
+        }
+      } catch (error) {
+        // Token might be expired or invalid
+        userService.logout()
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    setIsLoading(false)
+    initializeAuth()
   }, [])
 
   const login = async (email: string, password: string) => {
@@ -39,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       toast.success('Login successful!')
       navigate('/dashboard')
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Login failed')
+      // Don't show toast error here, let the form handle it
       throw error
     } finally {
       setIsLoading(false)

@@ -85,11 +85,11 @@
         }
     },
     "require-dev": {
-        "codeception/codeception": "^5.2",
+        "codeception/codeception": "^5.3",
         "codeception/module-cli": "^2.0",
         "codeception/module-db": "^3.2",
         "codeception/module-rest": "^3.4",
-        "codeception/module-symfony": "^3.5",
+        "codeception/module-symfony": "^3.7",
         "deptrac/deptrac": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.85",
         "infection/codeception-adapter": "^0.4.3",

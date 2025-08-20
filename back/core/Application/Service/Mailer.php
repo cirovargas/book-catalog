@@ -7,4 +7,6 @@ namespace DDD\Application\Service;
 interface Mailer
 {
     public function send(string $to, string $subject, string $body): void;
+
+    public function sendTemplated(string $to, string $subject, string $template, array $context): void;
 }

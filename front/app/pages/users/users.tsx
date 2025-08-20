@@ -1,54 +1,41 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { userService } from '@/services/user-service'
+import { useUserStore, useUserSelectors } from '@/stores/user-store'
 import type { User } from '@/types/user'
-import { toast } from 'react-hot-toast'
-import { 
-  Plus, 
-  Search, 
-  Edit, 
-  Trash2, 
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash2,
   Eye,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react'
 
 export default function Users() {
-  const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
-  const [page, setPage] = useState(1)
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    total: 0,
-    pages: 0,
-  })
+  const {
+    users,
+    isLoading,
+    searchQuery,
+    currentPage,
+    fetchUsers,
+    deleteUser,
+    setSearchQuery,
+  } = useUserStore()
 
-  const loadUsers = async () => {
-    try {
-      setLoading(true)
-      const response = await userService.getUsers(page, 10, search || undefined)
-      setUsers(response.data.users)
-      setPagination(response.data.pagination)
-    } catch (error) {
-      toast.error('Failed to load users')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { paginationInfo, hasUsers } = useUserSelectors()
 
   useEffect(() => {
-    loadUsers()
-  }, [page, search])
+    fetchUsers(currentPage, searchQuery)
+  }, [])
 
   const handleSearch = (value: string) => {
-    setSearch(value)
-    setPage(1) // Reset to first page when searching
+    setSearchQuery(value)
+    fetchUsers(1, value) // Reset to first page when searching
   }
 
   const handleDelete = async (userId: number) => {
@@ -57,12 +44,14 @@ export default function Users() {
     }
 
     try {
-      await userService.deleteUser(userId)
-      toast.success('User deleted successfully')
-      loadUsers() // Reload the list
+      await deleteUser(userId)
     } catch (error) {
-      toast.error('Failed to delete user')
+      // Error handling is done in the store
     }
+  }
+
+  const handlePageChange = (newPage: number) => {
+    fetchUsers(newPage, searchQuery)
   }
 
   const formatDate = (dateString?: string) => {
@@ -100,7 +89,7 @@ export default function Users() {
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
                 placeholder="Search users..."
-                value={search}
+                value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
                 className="pl-10"
               />
@@ -108,11 +97,11 @@ export default function Users() {
           </div>
         </CardHeader>
         <CardContent>
-          {loading ? (
+          {isLoading ? (
             <div className="flex items-center justify-center py-8">
               <div className="text-gray-500">Loading users...</div>
             </div>
-          ) : users.length === 0 ? (
+          ) : !hasUsers ? (
             <div className="flex items-center justify-center py-8">
               <div className="text-gray-500">No users found</div>
             </div>
@@ -138,8 +127,8 @@ export default function Users() {
                         <td className="py-3 px-4">
                           <div className="flex flex-wrap gap-1">
                             {user.roles.map((role) => (
-                              <Badge 
-                                key={role} 
+                              <Badge
+                                key={role}
                                 variant={getRoleBadgeVariant(user.roles)}
                                 className="text-xs"
                               >
@@ -163,8 +152,8 @@ export default function Users() {
                                 <Edit className="h-4 w-4" />
                               </Button>
                             </Link>
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleDelete(user.id)}
                               className="text-red-600 hover:text-red-700 hover:bg-red-50"
@@ -182,28 +171,28 @@ export default function Users() {
               {/* Pagination */}
               <div className="flex items-center justify-between mt-6">
                 <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Showing {((pagination.page - 1) * pagination.limit) + 1} to{' '}
-                  {Math.min(pagination.page * pagination.limit, pagination.total)} of{' '}
-                  {pagination.total} users
+                  Showing {((paginationInfo.currentPage - 1) * 10) + 1} to{' '}
+                  {Math.min(paginationInfo.currentPage * 10, paginationInfo.totalUsers)} of{' '}
+                  {paginationInfo.totalUsers} users
                 </div>
                 <div className="flex items-center space-x-2">
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setPage(page - 1)}
-                    disabled={page <= 1}
+                    onClick={() => handlePageChange(paginationInfo.currentPage - 1)}
+                    disabled={!paginationInfo.hasPrevPage}
                   >
                     <ChevronLeft className="h-4 w-4" />
                     Previous
                   </Button>
                   <span className="text-sm">
-                    Page {pagination.page} of {pagination.pages}
+                    Page {paginationInfo.currentPage} of {paginationInfo.totalPages}
                   </span>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setPage(page + 1)}
-                    disabled={page >= pagination.pages}
+                    onClick={() => handlePageChange(paginationInfo.currentPage + 1)}
+                    disabled={!paginationInfo.hasNextPage}
                   >
                     Next
                     <ChevronRight className="h-4 w-4" />

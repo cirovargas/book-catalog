@@ -52,11 +52,13 @@ class User extends BaseModel implements UserInterface, PasswordAuthenticatedUser
     /**
      * @see PasswordAuthenticatedUserInterface
      */
+    #[\Override]
     public function getPassword(): string
     {
         return $this->password;
     }
 
+    #[\Override]
     public function setPassword(string $password): void
     {
         $this->password = $password;

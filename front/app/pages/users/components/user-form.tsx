@@ -16,11 +16,13 @@ interface UserFormProps {
 export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormProps) {
   const [formData, setFormData] = useState({
     email: user?.email || '',
+    name: user?.name || '',
+    avatar: user?.avatar || '',
     password: '',
     confirmPassword: '',
     roles: user?.roles || ['ROLE_USER'],
   })
-  
+
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const validateForm = () => {
@@ -37,7 +39,7 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
     if (mode === 'create' && !formData.password) {
       newErrors.password = 'Password is required'
     }
-    
+
     if (formData.password) {
       if (formData.password.length < 8) {
         newErrors.password = 'Password must be at least 8 characters long'
@@ -57,7 +59,7 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -65,6 +67,8 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
     try {
       const submitData = {
         email: formData.email,
+        name: formData.name || undefined,
+        avatar: formData.avatar || undefined,
         roles: formData.roles,
         ...(formData.password && { password: formData.password }),
       }
@@ -78,7 +82,7 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
   const handleRoleChange = (role: string, checked: boolean) => {
     setFormData(prev => ({
       ...prev,
-      roles: checked 
+      roles: checked
         ? [...prev.roles, role]
         : prev.roles.filter(r => r !== role)
     }))
@@ -112,6 +116,30 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
             {errors.email && (
               <p className="text-sm text-red-600">{errors.email}</p>
             )}
+          </div>
+
+          {/* Name Field */}
+          <div className="space-y-2">
+            <Label htmlFor="name">Full Name (Optional)</Label>
+            <Input
+              id="name"
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              placeholder="John Doe"
+            />
+          </div>
+
+          {/* Avatar Field */}
+          <div className="space-y-2">
+            <Label htmlFor="avatar">Avatar URL (Optional)</Label>
+            <Input
+              id="avatar"
+              type="url"
+              value={formData.avatar}
+              onChange={(e) => setFormData(prev => ({ ...prev, avatar: e.target.value }))}
+              placeholder="https://example.com/avatar.jpg"
+            />
           </div>
 
           {/* Password Field */}
@@ -180,8 +208,8 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading 
-                ? (mode === 'create' ? 'Creating...' : 'Updating...') 
+              {isLoading
+                ? (mode === 'create' ? 'Creating...' : 'Updating...')
                 : (mode === 'create' ? 'Create User' : 'Update User')
               }
             </Button>

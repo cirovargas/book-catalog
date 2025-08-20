@@ -10,20 +10,23 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const { login } = useAuth()
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError('')
+
     if (!email || !password) {
-      alert('Please fill in all fields')
+      setError('Please fill in all fields')
       return
     }
 
     try {
       setIsLoading(true)
       await login(email, password)
-    } catch (error) {
-      // Error is already handled by the login function
+    } catch (error: any) {
+      setError(error.response?.data?.error || 'Login failed. Please check your credentials.')
     } finally {
       setIsLoading(false)
     }
@@ -47,6 +50,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className={error ? 'border-red-500' : ''}
                 />
               </div>
               <div className="grid gap-3">
@@ -62,8 +66,14 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className={error ? 'border-red-500' : ''}
                 />
               </div>
+              {error && (
+                <div className="text-red-600 text-sm text-center bg-red-50 p-3 rounded-md">
+                  {error}
+                </div>
+              )}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? 'Logging in...' : 'Login'}
               </Button>

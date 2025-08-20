@@ -1,4 +1,5 @@
 import { apiService } from './api'
+import { getUserFromToken, isTokenExpired } from '@/utils/jwt'
 import type {
   User,
   CreateUserRequest,
@@ -44,15 +45,19 @@ export class UserService {
       password,
     })
 
-    // Store token temporarily
+    // Store token
     localStorage.setItem('token', response.token)
 
-    // Create a mock user object from the JWT payload for now
-    // In a real implementation, you might decode the JWT or fetch user data
+    // Decode JWT to get user data
+    const tokenData = getUserFromToken(response.token)
+    if (!tokenData) {
+      throw new Error('Invalid token received')
+    }
+
     const user: User = {
-      id: 1,
-      email: email,
-      roles: ['ROLE_USER'], // This would come from JWT or separate API call
+      id: 1, // We'll need to get this from a separate API call or include in JWT
+      email: tokenData.email,
+      roles: tokenData.roles,
     }
 
     localStorage.setItem('user', JSON.stringify(user))
@@ -66,8 +71,36 @@ export class UserService {
   }
 
   getCurrentUser(): User | null {
+    const token = this.getToken()
+    if (!token) {
+      return null
+    }
+
+    // Check if token is expired
+    if (isTokenExpired(token)) {
+      this.logout()
+      return null
+    }
+
+    // Try to get user from localStorage first
     const userStr = localStorage.getItem('user')
-    return userStr ? JSON.parse(userStr) : null
+    if (userStr) {
+      return JSON.parse(userStr)
+    }
+
+    // If no user in localStorage, try to decode from token
+    const tokenData = getUserFromToken(token)
+    if (tokenData) {
+      const user: User = {
+        id: 1, // Default ID, should be fetched from API
+        email: tokenData.email,
+        roles: tokenData.roles,
+      }
+      localStorage.setItem('user', JSON.stringify(user))
+      return user
+    }
+
+    return null
   }
 
   getToken(): string | null {
@@ -75,7 +108,8 @@ export class UserService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken()
+    const token = this.getToken()
+    return !!token && !isTokenExpired(token)
   }
 }
 

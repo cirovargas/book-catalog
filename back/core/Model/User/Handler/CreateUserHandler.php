@@ -2,43 +2,42 @@
 
 namespace DDD\Model\User\Handler;
 
+use DDD\Application\Event\EventRecorder;
 use DDD\Model\User\Command\CreateUserCommand;
+use DDD\Model\User\Event\UserRegisteredEvent;
 use DDD\Model\User\Exception\UserEmailAlreadyExistsException;
 use DDD\Model\User\Repository\UserRepositoryInterface;
 use DDD\Model\User\Service\UserFactory;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\User as UserEntity;
+use DDD\Model\User\User;
 
 class CreateUserHandler
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly UserFactory $userFactory,
-        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly EventRecorder $eventRecorder,
     ) {
     }
 
     public function __invoke(CreateUserCommand $command): void
     {
-        // Check if user with this email already exists
         $existingUser = $this->userRepository->findByEmail($command->getEmail());
-        if ($existingUser !== null) {
+        if ($existingUser instanceof User) {
             throw new UserEmailAlreadyExistsException();
         }
 
-        // Create a temporary user entity for password hashing
-        $tempUser = new UserEntity();
-        $hashedPassword = $this->passwordHasher->hashPassword($tempUser, $command->getPassword());
+        $plainPassword = random_int(1, 9) . random_int(1, 9) . random_int(1, 9) . random_int(1, 9) . random_int(1, 9) . random_int(1, 9);
 
-        // Create the domain user
-        $user = $this->userFactory->create($command->getEmail(), $hashedPassword);
-        
-        // Convert to entity and set roles
-        $userEntity = new UserEntity();
-        $userEntity->setEmail($user->getEmail());
-        $userEntity->setPassword($user->getPassword());
-        $userEntity->setRoles($command->getRoles());
+        $user = $this->userFactory->createWithPlainPassword(
+            $command->getEmail(),
+            $plainPassword,
+            $command->getRoles(),
+            $command->getName(),
+            $command->getAvatar()
+        );
 
-        $this->userRepository->save($userEntity);
+        $this->userRepository->save($user);
+
+        $this->eventRecorder->record(new UserRegisteredEvent($user->getName(), $user->getEmail(), $plainPassword));
     }
 }

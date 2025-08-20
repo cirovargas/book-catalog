@@ -8,11 +8,13 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
+  Home,
   Map,
   PieChart,
   Settings2,
   SquareTerminal,
-  Users
+  Users,
+  HomeIcon
 } from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main/nav-main'
@@ -42,6 +44,11 @@ const data = {
     }
   ],
   navMain: [
+    {
+      title: 'Home',
+      url: '/dashboard',
+      icon: HomeIcon
+    },
     {
       title: 'Playground',
       url: '#',

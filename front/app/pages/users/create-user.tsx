@@ -1,23 +1,22 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { UserForm } from '@/pages/users/components/user-form'
-import { userService } from '@/services/user-service'
+import { useUserStore } from '@/stores/user-store'
 import type { CreateUserRequest } from '@/types/user'
-import { toast } from 'react-hot-toast'
 
 export default function CreateUser() {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
+  const { createUser } = useUserStore()
+
   const handleSubmit = async (data: CreateUserRequest) => {
     try {
       setIsLoading(true)
-      await userService.createUser(data)
-      toast.success('User created successfully!')
+      await createUser(data)
       navigate('/users')
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Failed to create user')
-      throw error
+      // Error handling is done in the store
     } finally {
       setIsLoading(false)
     }

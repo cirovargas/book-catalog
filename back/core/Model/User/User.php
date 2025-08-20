@@ -5,7 +5,9 @@ namespace DDD\Model\User;
 class User
 {
     protected ?int $id = null;
+
     protected ?\DateTimeImmutable $createdAt = null;
+
     protected ?\DateTimeImmutable $updatedAt = null;
 
     /**
@@ -14,6 +16,8 @@ class User
     public function __construct(
         protected string $email,
         protected string $password,
+        protected ?string $name = null,
+        protected ?string $avatar = null,
     ) {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
@@ -54,6 +58,28 @@ class User
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = null !== $name && '' !== $name && '0' !== $name ? trim($name) : null;
+        $this->updateTimestamp();
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
+        $this->updateTimestamp();
     }
 
     private function updateTimestamp(): void

@@ -6,13 +6,18 @@ use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 
 class UserVoter extends Voter
 {
     public const VIEW = 'USER_VIEW';
+
     public const EDIT = 'USER_EDIT';
+
     public const DELETE = 'USER_DELETE';
+
     public const CREATE = 'USER_CREATE';
+
     public const LIST = 'USER_LIST';
 
     protected function supports(string $attribute, mixed $subject): bool
@@ -26,7 +31,7 @@ class UserVoter extends Voter
             && $subject instanceof User;
     }
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
 
@@ -41,26 +46,17 @@ class UserVoter extends Voter
         }
 
         // For non-admin users, check specific permissions
-        switch ($attribute) {
-            case self::LIST:
-            case self::CREATE:
-                // Only admins can list users or create new users
-                return false;
-
-            case self::VIEW:
-                // Users can view their own profile, admins can view any
-                return $this->canView($subject, $user);
-
-            case self::EDIT:
-                // Users can edit their own profile, admins can edit any
-                return $this->canEdit($subject, $user);
-
-            case self::DELETE:
-                // Only admins can delete users, and they cannot delete themselves
-                return $this->canDelete($subject, $user);
-        }
-
-        return false;
+        return match ($attribute) {
+            // Only admins can list users or create new users
+            self::LIST, self::CREATE => false,
+            // Users can view their own profile, admins can view any
+            self::VIEW => $this->canView($subject, $user),
+            // Users can edit their own profile, admins can edit any
+            self::EDIT => $this->canEdit($subject, $user),
+            // Only admins can delete users, and they cannot delete themselves
+            self::DELETE => $this->canDelete($subject, $user),
+            default => false,
+        };
     }
 
     private function canView(User $subject, UserInterface $user): bool
