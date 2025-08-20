@@ -338,7 +338,7 @@ class EntityCest {
 ./vendor/bin/codecept run
 ```
 2. If any of the commands fail, you need to fix the issues and go back to step 1
-3. Go to the frontend and test the new functionality in the browser using Playright
+3. Go to the frontend and test the new functionality in the browser using Playwright
 4. If all the tests pass, you can commit your changes
 
 
@@ -484,7 +484,7 @@ class EntitySubscriber implements EventSubscriberInterface {
 3) **Tests:** create/update codeception tests (back).
 4) **Quality Gate (blocking):** linters/static/formatters/rector.
 5) **Run E2E tests** using Playwright.
-5) **Reports:** store under `./reports/**` (coverage, lint, playwright).
+5) **Reports:** store under `./reports/**` (coverage, lint, Playwright).
 6) **Delivery summary:** what changed, how to validate, risks & rollback.
 7) **Documentation:** update README, API docs (adr, haiku and diagrams with mermaid), etc.
 
