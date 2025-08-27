@@ -14,24 +14,25 @@ class ApiService {
 
     // Request interceptor to add auth token
     this.api.interceptors.request.use(
-      (config) => {
+      (config: any) => {
         const token = localStorage.getItem('token')
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
         return config
       },
-      (error) => {
+      (error: any) => {
         return Promise.reject(error)
       }
     )
 
     // Response interceptor for error handling
     this.api.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response?.status === 401) {
-          // Token expired or invalid
+      (response: any) => response,
+      (error: any) => {
+        // Don't redirect on 401 for login endpoint - let the form handle the error
+        if (error.response?.status === 401 && !error.config?.url?.includes('/login_check')) {
+          // Token expired or invalid (but not login failure)
           localStorage.removeItem('token')
           localStorage.removeItem('user')
           window.location.href = '/'
@@ -82,6 +83,11 @@ class ApiService {
   }
 
   private handleError(error: any) {
+    // Don't show toast for login errors - let the form handle them
+    if (error.config?.url?.includes('/login_check')) {
+      return
+    }
+    
     const message = error.response?.data?.error || error.message || 'An error occurred'
     toast.error(message)
   }

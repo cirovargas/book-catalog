@@ -11,16 +11,29 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, logout } = useAuth()
+const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
+  const { user, logout, isAuthenticated, isLoading } = useAuth()
+
   const handleLogout = () => {
     logout()
   }
 
-  if (!user) {
+  // Show loading spinner while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <LoadingSpinner size="md" />
+      </div>
+    )
+  }
+
+  // Redirect to login if not authenticated
+  if (!isAuthenticated) {
     return <Navigate to="/" />
   }
+
   return (
     <>
       <SidebarProvider>
@@ -48,7 +61,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
             <Outlet />
 
-            <button onClick={handleLogout}>Logout</button>
+            {/*<button onClick={handleLogout}>Logout</button>*/}
           </div>
         </SidebarInset>
       </SidebarProvider>
@@ -56,4 +69,4 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export default ProtectedRoute
+export default ProtectedLayout

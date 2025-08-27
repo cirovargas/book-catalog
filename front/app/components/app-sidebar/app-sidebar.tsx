@@ -14,7 +14,8 @@ import {
   Settings2,
   SquareTerminal,
   Users,
-  HomeIcon
+  HomeIcon,
+  Sun
 } from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main/nav-main'
@@ -49,70 +50,94 @@ const data = {
       url: '/dashboard',
       icon: HomeIcon
     },
+    // {
+    //   title: 'Playground',
+    //   url: '#',
+    //   icon: SquareTerminal,
+    //   isActive: true,
+    //   items: [
+    //     {
+    //       title: 'History',
+    //       url: '#'
+    //     },
+    //     {
+    //       title: 'Starred',
+    //       url: '#'
+    //     },
+    //     {
+    //       title: 'Settings',
+    //       url: '#'
+    //     }
+    //   ]
+    // },
+    // {
+    //   title: 'Models',
+    //   url: '#',
+    //   icon: Bot,
+    //   items: [
+    //     {
+    //       title: 'Genesis',
+    //       url: '#'
+    //     },
+    //     {
+    //       title: 'Explorer',
+    //       url: '#'
+    //     },
+    //     {
+    //       title: 'Quantum',
+    //       url: '#'
+    //     }
+    //   ]
+    // },
+    // {
+    //   title: 'Documentation',
+    //   url: '#',
+    //   icon: BookOpen,
+    //   items: [
+    //     {
+    //       title: 'Introduction',
+    //       url: '#'
+    //     },
+    //     {
+    //       title: 'Get Started',
+    //       url: '#'
+    //     },
+    //     {
+    //       title: 'Tutorials',
+    //       url: '#'
+    //     },
+    //     {
+    //       title: 'Changelog',
+    //       url: '#'
+    //     }
+    //   ]
+    // }
+  ],
+  // projects: [
+  //   {
+  //     name: 'Design Engineering',
+  //     url: '#',
+  //     icon: Frame
+  //   },
+  //   {
+  //     name: 'Sales & Marketing',
+  //     url: '#',
+  //     icon: PieChart
+  //   },
+  //   {
+  //     name: 'Travel',
+  //     url: '#',
+  //     icon: Map
+  //   }
+  // ],
+  administration: [
     {
-      title: 'Playground',
-      url: '#',
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: 'History',
-          url: '#'
-        },
-        {
-          title: 'Starred',
-          url: '#'
-        },
-        {
-          title: 'Settings',
-          url: '#'
-        }
-      ]
+      name: 'Users',
+      url: '/users',
+      icon: Users
     },
     {
-      title: 'Models',
-      url: '#',
-      icon: Bot,
-      items: [
-        {
-          title: 'Genesis',
-          url: '#'
-        },
-        {
-          title: 'Explorer',
-          url: '#'
-        },
-        {
-          title: 'Quantum',
-          url: '#'
-        }
-      ]
-    },
-    {
-      title: 'Documentation',
-      url: '#',
-      icon: BookOpen,
-      items: [
-        {
-          title: 'Introduction',
-          url: '#'
-        },
-        {
-          title: 'Get Started',
-          url: '#'
-        },
-        {
-          title: 'Tutorials',
-          url: '#'
-        },
-        {
-          title: 'Changelog',
-          url: '#'
-        }
-      ]
-    },
-    {
-      title: 'Settings',
+      name: 'Settings',
       url: '#',
       icon: Settings2,
       items: [
@@ -133,36 +158,23 @@ const data = {
           url: '#'
         }
       ]
-    }
-  ],
-  projects: [
-    {
-      name: 'Design Engineering',
-      url: '#',
-      icon: Frame
     },
     {
-      name: 'Sales & Marketing',
-      url: '#',
-      icon: PieChart
+      name: 'Theme',
+      url: '/theme-demo',
+      icon: Sun
     },
-    {
-      name: 'Travel',
-      url: '#',
-      icon: Map
-    }
-  ],
-  administration: [
-    {
-      name: 'Users',
-      url: '/users',
-      icon: Users
-    }
   ]
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, logout } = useAuth()
+  const isDev = import.meta.env.DEV
+
+  // Filter navigation items based on environment
+  const navMainItems = isDev 
+    ? data.navMain 
+    : data.navMain.filter(item => item.title !== 'Theme Demo')
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -170,8 +182,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={navMainItems} />
+        {/* <NavProjects projects={data.projects} /> */}
         <NavAdministration projects={data.administration} />
       </SidebarContent>
       <SidebarFooter>

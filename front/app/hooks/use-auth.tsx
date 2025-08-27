@@ -24,7 +24,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const initializeAuth = async () => {
       try {
         if (userService.isAuthenticated()) {
-          const currentUser = userService.getCurrentUser()
+          let currentUser = userService.getCurrentUser()
+          
+          // If no user data in localStorage but token is valid, fetch from API
+          if (!currentUser) {
+            try {
+              currentUser = await userService.getCurrentUserFromApi()
+              localStorage.setItem('user', JSON.stringify(currentUser))
+            } catch (error) {
+              // Token might be invalid, logout
+              userService.logout()
+              setIsLoading(false)
+              return
+            }
+          }
+          
           if (currentUser) {
             setUser(currentUser)
           }
@@ -42,7 +56,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      setIsLoading(true)
       const response = await userService.login(email, password)
       setUser(response.user)
       toast.success('Login successful!')
@@ -50,8 +63,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error: any) {
       // Don't show toast error here, let the form handle it
       throw error
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -67,7 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     login,
     logout,
     isLoading,
-    isAuthenticated: !!user && userService.isAuthenticated()
+    isAuthenticated: userService.isAuthenticated()
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

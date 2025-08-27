@@ -27,6 +27,11 @@ export class UserService {
     return apiService.get<UserResponse>(`/users/${id}`)
   }
 
+  async getCurrentUserFromApi(): Promise<User> {
+    const response = await apiService.get<UserResponse>('/me')
+    return response.data
+  }
+
   async createUser(userData: CreateUserRequest): Promise<ApiSuccessResponse> {
     return apiService.post<ApiSuccessResponse>('/users', userData)
   }
@@ -48,18 +53,8 @@ export class UserService {
     // Store token
     localStorage.setItem('token', response.token)
 
-    // Decode JWT to get user data
-    const tokenData = getUserFromToken(response.token)
-    if (!tokenData) {
-      throw new Error('Invalid token received')
-    }
-
-    const user: User = {
-      id: 1, // We'll need to get this from a separate API call or include in JWT
-      email: tokenData.email,
-      roles: tokenData.roles,
-    }
-
+    // Get user data from API
+    const user = await this.getCurrentUserFromApi()
     localStorage.setItem('user', JSON.stringify(user))
 
     return { token: response.token, user }
@@ -92,7 +87,7 @@ export class UserService {
     const tokenData = getUserFromToken(token)
     if (tokenData) {
       const user: User = {
-        id: 1, // Default ID, should be fetched from API
+        id: 1, // Default ID, will be updated when API call is made
         email: tokenData.email,
         roles: tokenData.roles,
       }

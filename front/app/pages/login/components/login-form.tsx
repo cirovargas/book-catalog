@@ -26,7 +26,16 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
       setIsLoading(true)
       await login(email, password)
     } catch (error: any) {
-      setError(error.response?.data?.error || 'Login failed. Please check your credentials.')
+      // Handle different types of login errors
+      if (error.response?.status === 401) {
+        setError('Invalid email or password. Please check your credentials.')
+      } else if (error.response?.status === 422) {
+        setError(error.response?.data?.error || 'Invalid input data.')
+      } else if (error.code === 'NETWORK_ERROR' || !error.response) {
+        setError('Network error. Please check your connection and try again.')
+      } else {
+        setError(error.response?.data?.error || 'Login failed. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }

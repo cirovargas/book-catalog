@@ -5,6 +5,7 @@ import { userService } from '@/services/user-service'
 import type { User, UpdateUserRequest } from '@/types/user'
 import { toast } from 'react-hot-toast'
 import { Button } from '@/components/ui/button'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { ArrowLeft } from 'lucide-react'
 
 export default function EditUser() {
@@ -52,7 +53,7 @@ export default function EditUser() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-gray-500">Loading user...</div>
+        <LoadingSpinner size="md" />
       </div>
     )
   }

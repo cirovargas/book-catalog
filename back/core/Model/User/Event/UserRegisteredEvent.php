@@ -11,7 +11,7 @@ readonly class UserRegisteredEvent implements Event
     public function __construct(
         private string $name,
         private string $email,
-        private string $plainPassword
+        private string $plainPassword,
     ) {
     }
 

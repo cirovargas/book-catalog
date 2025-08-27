@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
+import { ThemeTogglerSwitch } from '@/components/theme-toggler'
 import type { User } from '@/types/user'
 
 export function NavUser({ user, logout }: { user: User | null; logout: () => void }) {
@@ -80,6 +81,15 @@ export function NavUser({ user, logout }: { user: User | null; logout: () => voi
               <DropdownMenuItem>
                 <Bell />
                 Notifications
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <div className="flex items-center justify-between w-full">
+                  <span>Dark Mode</span>
+                  <ThemeTogglerSwitch />
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

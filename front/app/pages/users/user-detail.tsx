@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { userService } from '@/services/user-service'
 import type { User } from '@/types/user'
 import { toast } from 'react-hot-toast'
@@ -67,7 +68,7 @@ export default function UserDetail() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-gray-500">Loading user...</div>
+        <LoadingSpinner size="md" />
       </div>
     )
   }

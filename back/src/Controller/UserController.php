@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserController extends AbstractController
@@ -23,7 +24,25 @@ class UserController extends AbstractController
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly MessageBusInterface $commandBus,
+        private readonly TokenStorageInterface $tokenStorage,
     ) {
+    }
+
+    #[Route('/api/me', name: 'current_user', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function currentUser(): JsonResponse
+    {
+        $token = $this->tokenStorage->getToken();
+        if (!$token instanceof \Symfony\Component\Security\Core\Authentication\Token\TokenInterface) {
+            return $this->jsonErrorResponse('Not authenticated', Response::HTTP_UNAUTHORIZED);
+        }
+
+        $user = $token->getUser();
+        if (!$user instanceof \DDD\Model\User\User) {
+            return $this->jsonErrorResponse('Invalid user', Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $this->jsonSuccessResponse($user);
     }
 
     #[Route('/api/users', name: 'users_list', methods: ['GET'])]
