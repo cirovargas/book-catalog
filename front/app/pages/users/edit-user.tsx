@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { UserForm } from '@/pages/users/components/user-form'
-import { userService } from '@/services/user-service'
-import type { User, UpdateUserRequest } from '@/types/user'
-import { toast } from 'react-hot-toast'
+import { useUsers } from '@/hooks/use-users'
+import type { UpdateUserRequest } from '@/types/user'
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { ArrowLeft } from 'lucide-react'
@@ -11,46 +10,31 @@ import { ArrowLeft } from 'lucide-react'
 export default function EditUser() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { selectedUser, isLoadingUser, fetchUser, updateUser } = useUsers()
 
   useEffect(() => {
     if (id) {
-      loadUser(parseInt(id))
+      fetchUser(parseInt(id))
     }
-  }, [id])
-
-  const loadUser = async (userId: number) => {
-    try {
-      setLoading(true)
-      const response = await userService.getUser(userId)
-      setUser(response.data)
-    } catch (error) {
-      toast.error('Failed to load user')
-      navigate('/users')
-    } finally {
-      setLoading(false)
-    }
-  }
+  }, [id, fetchUser])
 
   const handleSubmit = async (data: UpdateUserRequest) => {
-    if (!user) return
+    if (!selectedUser) return
 
     try {
       setIsSubmitting(true)
-      await userService.updateUser(user.id, data)
-      toast.success('User updated successfully!')
-      navigate(`/users/${user.id}`)
+      await updateUser(selectedUser.id, data)
+      navigate(`/users/${selectedUser.id}`)
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Failed to update user')
-      throw error
+      // Error handling is done in the store
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  if (loading) {
+  if (isLoadingUser) {
     return (
       <div className="flex items-center justify-center py-8">
         <LoadingSpinner size="md" />
@@ -58,7 +42,7 @@ export default function EditUser() {
     )
   }
 
-  if (!user) {
+  if (!selectedUser) {
     return (
       <div className="flex items-center justify-center py-8">
         <div className="text-gray-500">User not found</div>
@@ -69,7 +53,7 @@ export default function EditUser() {
   return (
     <div className="space-y-6">
       <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="sm" onClick={() => navigate(`/users/${user.id}`)}>
+        <Button variant="ghost" size="sm" onClick={() => navigate(`/users/${selectedUser.id}`)}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to User
         </Button>
@@ -79,7 +63,7 @@ export default function EditUser() {
         </div>
       </div>
 
-      <UserForm mode="edit" user={user} onSubmit={handleSubmit} isLoading={isSubmitting} />
+      <UserForm mode="edit" user={selectedUser} onSubmit={handleSubmit} isLoading={isSubmitting} />
     </div>
   )
 }

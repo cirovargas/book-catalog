@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,7 +25,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useUserStore, useUserSelectors } from '@/stores/user-store'
+import { useUsers } from '@/hooks/use-users'
 import type { User } from '@/types/user'
 import {
   Plus,
@@ -37,6 +37,7 @@ import {
   ChevronRight,
   ArrowUpDown,
   MoreHorizontal,
+  RefreshCw,
 } from 'lucide-react'
 import {
   DropdownMenu,
@@ -54,19 +55,17 @@ export default function Users() {
     fetchUsers,
     deleteUser,
     setSearchQuery,
-  } = useUserStore()
-
-  const { paginationInfo, hasUsers } = useUserSelectors()
+    refreshUsers,
+    hasUsers,
+    isCacheValid,
+    paginationInfo,
+  } = useUsers()
 
   // TanStack Table states
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
-
-  useEffect(() => {
-    fetchUsers(currentPage, searchQuery)
-  }, [])
 
   const handleSearch = (value: string) => {
     setSearchQuery(value)
@@ -87,6 +86,10 @@ export default function Users() {
 
   const handlePageChange = (newPage: number) => {
     fetchUsers(newPage, searchQuery)
+  }
+
+  const handleRefresh = async () => {
+    await refreshUsers()
   }
 
   const formatDate = (dateString?: string) => {
@@ -237,17 +240,37 @@ export default function Users() {
             Manage user accounts and permissions
           </p>
         </div>
-        <Link to="/users/create">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add User
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isLoading}
+            className="flex items-center space-x-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
           </Button>
-        </Link>
+          <Link to="/users/create">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Add User
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>User List</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>User List</CardTitle>
+            {isCacheValid && (
+              <div className="text-sm text-green-600 flex items-center space-x-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Cache valid</span>
+              </div>
+            )}
+          </div>
           <div className="flex items-center space-x-2">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />

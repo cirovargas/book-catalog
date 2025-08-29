@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
-import { userService } from '@/services/user-service'
-import type { User } from '@/types/user'
-import { toast } from 'react-hot-toast'
+import { useUsers } from '@/hooks/use-users'
 import { 
   Edit, 
   Trash2, 
@@ -19,39 +17,25 @@ import {
 export default function UserDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+
+  const { selectedUser, isLoadingUser, fetchUser, deleteUser } = useUsers()
 
   useEffect(() => {
     if (id) {
-      loadUser(parseInt(id))
+      fetchUser(parseInt(id))
     }
-  }, [id])
-
-  const loadUser = async (userId: number) => {
-    try {
-      setLoading(true)
-      const response = await userService.getUser(userId)
-      setUser(response.data)
-    } catch (error) {
-      toast.error('Failed to load user')
-      navigate('/users')
-    } finally {
-      setLoading(false)
-    }
-  }
+  }, [id, fetchUser])
 
   const handleDelete = async () => {
-    if (!user || !confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+    if (!selectedUser || !confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
       return
     }
 
     try {
-      await userService.deleteUser(user.id)
-      toast.success('User deleted successfully')
+      await deleteUser(selectedUser.id)
       navigate('/users')
     } catch (error) {
-      toast.error('Failed to delete user')
+      // Error handling is done in the store
     }
   }
 
@@ -65,7 +49,7 @@ export default function UserDetail() {
     return 'secondary'
   }
 
-  if (loading) {
+  if (isLoadingUser) {
     return (
       <div className="flex items-center justify-center py-8">
         <LoadingSpinner size="md" />
@@ -73,7 +57,7 @@ export default function UserDetail() {
     )
   }
 
-  if (!user) {
+  if (!selectedUser) {
     return (
       <div className="flex items-center justify-center py-8">
         <div className="text-gray-500">User not found</div>
@@ -97,7 +81,7 @@ export default function UserDetail() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Link to={`/users/${user.id}/edit`}>
+          <Link to={`/users/${selectedUser.id}/edit`}>
             <Button variant="outline">
               <Edit className="h-4 w-4 mr-2" />
               Edit
@@ -127,14 +111,22 @@ export default function UserDetail() {
               <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
                 User ID
               </label>
-              <p className="text-lg font-medium">{user.id}</p>
+              <p className="text-lg font-medium">{selectedUser.id}</p>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
                 Email Address
               </label>
-              <p className="text-lg font-medium">{user.email}</p>
+              <p className="text-lg font-medium">{selectedUser.email}</p>
             </div>
+            {selectedUser.name && (
+              <div>
+                <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Full Name
+                </label>
+                <p className="text-lg font-medium">{selectedUser.name}</p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -152,10 +144,10 @@ export default function UserDetail() {
                 Assigned Roles
               </label>
               <div className="flex flex-wrap gap-2">
-                {user.roles.map((role) => (
+                {selectedUser.roles.map((role) => (
                   <Badge 
                     key={role} 
-                    variant={getRoleBadgeVariant(user.roles)}
+                    variant={getRoleBadgeVariant(selectedUser.roles)}
                   >
                     {role.replace('ROLE_', '')}
                   </Badge>
@@ -179,13 +171,13 @@ export default function UserDetail() {
                 <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   Created At
                 </label>
-                <p className="text-lg font-medium">{formatDate(user.createdAt)}</p>
+                <p className="text-lg font-medium">{formatDate(selectedUser.createdAt)}</p>
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   Last Updated
                 </label>
-                <p className="text-lg font-medium">{formatDate(user.updatedAt)}</p>
+                <p className="text-lg font-medium">{formatDate(selectedUser.updatedAt)}</p>
               </div>
             </div>
           </CardContent>

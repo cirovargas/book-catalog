@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import type { User, CreateUserRequest, UpdateUserRequest } from '@/types/user'
+import { z } from 'zod'
 
 interface UserFormProps {
   user?: User
@@ -14,78 +16,80 @@ interface UserFormProps {
 }
 
 export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormProps) {
-  const [formData, setFormData] = useState({
-    email: user?.email || '',
-    name: user?.name || '',
-    avatar: user?.avatar || '',
-    password: '',
-    confirmPassword: '',
-    roles: user?.roles || ['ROLE_USER'],
+
+  const schema = z.object({
+    email: z
+      .string()
+      .min(1, 'Email is required')
+      .email('Please enter a valid email address'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long')
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Password must contain at least one lowercase letter, one uppercase letter, and one number'),
+    confirmPassword: z.string(),
+    name: z.string().optional(),
+    avatar: z.string().url('Please enter a valid URL').optional().or(z.literal('')),
+    roles: z.array(z.string()).min(1, 'At least one role must be selected'),
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
   })
 
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  type UserFormData = z.infer<typeof schema>
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-
-    // Email validation
-    if (!formData.email) {
-      newErrors.email = 'Email is required'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
-    }
-
-    // Password validation (required for create, optional for edit)
-    if (mode === 'create' && !formData.password) {
-      newErrors.password = 'Password is required'
-    }
-
-    if (formData.password) {
-      if (formData.password.length < 8) {
-        newErrors.password = 'Password must be at least 8 characters long'
-      } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-        newErrors.password = 'Password must contain at least one lowercase letter, one uppercase letter, and one number'
-      }
-    }
-
-    // Confirm password validation
-    if (formData.password && formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+  const defaultValues = {
+    email: user?.email || '',
+    password: '',
+    confirmPassword: '',
+    name: user?.name || '',
+    avatar: user?.avatar || '',
+    roles: user?.roles || ['ROLE_USER'],
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues,
+  })
 
-    if (!validateForm()) {
-      return
-    }
+  const watchedPassword = watch('password')
+  const watchedRoles = watch('roles')
 
+  const handleFormSubmit = async (data: UserFormData) => {
     try {
+      // Transform form data to API format
       const submitData = {
-        email: formData.email,
-        name: formData.name || undefined,
-        avatar: formData.avatar || undefined,
-        roles: formData.roles,
-        ...(formData.password && { password: formData.password }),
+        email: data.email,
+        name: data.name || undefined,
+        avatar: data.avatar || undefined,
+        roles: data.roles,
+        ...(data.password && { password: data.password }),
       }
 
       await onSubmit(submitData)
+
+      // Reset form on successful submission
+      if (mode === 'create') {
+        reset()
+      }
     } catch (error) {
       // Error handling is done in the parent component
     }
   }
 
   const handleRoleChange = (role: string, checked: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      roles: checked
-        ? [...prev.roles, role]
-        : prev.roles.filter(r => r !== role)
-    }))
+    const currentRoles = watchedRoles || []
+    const newRoles = checked
+      ? [...currentRoles, role]
+      : currentRoles.filter(r => r !== role)
+
+    setValue('roles', newRoles)
   }
 
   const availableRoles = [
@@ -101,20 +105,19 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
           {/* Email Field */}
           <div className="space-y-2">
             <Label htmlFor="email">Email Address</Label>
             <Input
               id="email"
               type="email"
-              value={formData.email}
-              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+              {...register('email')}
               placeholder="user@example.com"
               className={errors.email ? 'border-red-500' : ''}
             />
             {errors.email && (
-              <p className="text-sm text-red-600">{errors.email}</p>
+              <p className="text-sm text-red-600">{errors.email.message}</p>
             )}
           </div>
 
@@ -124,10 +127,12 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
             <Input
               id="name"
               type="text"
-              value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              {...register('name')}
               placeholder="John Doe"
             />
+            {errors.name && (
+              <p className="text-sm text-red-600">{errors.name.message}</p>
+            )}
           </div>
 
           {/* Avatar Field */}
@@ -136,10 +141,12 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
             <Input
               id="avatar"
               type="url"
-              value={formData.avatar}
-              onChange={(e) => setFormData(prev => ({ ...prev, avatar: e.target.value }))}
+              {...register('avatar')}
               placeholder="https://example.com/avatar.jpg"
             />
+            {errors.avatar && (
+              <p className="text-sm text-red-600">{errors.avatar.message}</p>
+            )}
           </div>
 
           {/* Password Field */}
@@ -150,30 +157,28 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
             <Input
               id="password"
               type="password"
-              value={formData.password}
-              onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+              {...register('password')}
               placeholder={mode === 'create' ? 'Enter password' : 'Enter new password'}
               className={errors.password ? 'border-red-500' : ''}
             />
             {errors.password && (
-              <p className="text-sm text-red-600">{errors.password}</p>
+              <p className="text-sm text-red-600">{errors.password.message}</p>
             )}
           </div>
 
           {/* Confirm Password Field */}
-          {formData.password && (
+          {watchedPassword && (
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
                 id="confirmPassword"
                 type="password"
-                value={formData.confirmPassword}
-                onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                {...register('confirmPassword')}
                 placeholder="Confirm password"
                 className={errors.confirmPassword ? 'border-red-500' : ''}
               />
               {errors.confirmPassword && (
-                <p className="text-sm text-red-600">{errors.confirmPassword}</p>
+                <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>
               )}
             </div>
           )}
@@ -186,7 +191,7 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
                 <div key={role.value} className="flex items-start space-x-3">
                   <Checkbox
                     id={role.value}
-                    checked={formData.roles.includes(role.value)}
+                    checked={watchedRoles?.includes(role.value) || false}
                     onCheckedChange={(checked) => handleRoleChange(role.value, checked as boolean)}
                   />
                   <div className="space-y-1">
@@ -200,6 +205,9 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
                 </div>
               ))}
             </div>
+            {errors.roles && (
+              <p className="text-sm text-red-600">{errors.roles.message}</p>
+            )}
           </div>
 
           {/* Submit Button */}
@@ -207,8 +215,8 @@ export function UserForm({ user, onSubmit, isLoading = false, mode }: UserFormPr
             <Button type="button" variant="outline" onClick={() => window.history.back()}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading
+            <Button type="submit" disabled={isLoading || isSubmitting}>
+              {isLoading || isSubmitting
                 ? (mode === 'create' ? 'Creating...' : 'Updating...')
                 : (mode === 'create' ? 'Create User' : 'Update User')
               }

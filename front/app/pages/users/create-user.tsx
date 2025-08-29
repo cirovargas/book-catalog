@@ -1,19 +1,20 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { UserForm } from '@/pages/users/components/user-form'
-import { useUserStore } from '@/stores/user-store'
-import type { CreateUserRequest } from '@/types/user'
+import { useUsers } from '@/hooks/use-users'
+import type { CreateUserRequest, UpdateUserRequest } from '@/types/user'
 
 export default function CreateUser() {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
-  const { createUser } = useUserStore()
+  const { createUser } = useUsers()
 
-  const handleSubmit = async (data: CreateUserRequest) => {
+  const handleSubmit = async (data: CreateUserRequest | UpdateUserRequest) => {
     try {
       setIsLoading(true)
-      await createUser(data)
+      // Since this is create mode, we know data is CreateUserRequest
+      await createUser(data as CreateUserRequest)
       navigate('/users')
     } catch (error: any) {
       // Error handling is done in the store

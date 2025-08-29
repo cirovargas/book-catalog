@@ -17,18 +17,24 @@ interface UserState {
   selectedUser: User | null
   isLoadingUser: boolean
   
+  // Cache management
+  lastFetched: number | null
+  cacheExpiry: number // 5 minutes in milliseconds
+  isInitialized: boolean
+  
   // Actions
-  fetchUsers: (page?: number, search?: string) => Promise<void>
+  fetchUsers: (page?: number, search?: string, force?: boolean) => Promise<void>
   createUser: (userData: CreateUserRequest) => Promise<void>
   updateUser: (id: number, userData: UpdateUserRequest) => Promise<void>
   deleteUser: (id: number) => Promise<void>
-  fetchUser: (id: number) => Promise<void>
+  fetchUser: (id: number, force?: boolean) => Promise<void>
   setSearchQuery: (query: string) => void
   clearSelectedUser: () => void
   
   // Cache management
   invalidateCache: () => void
   refreshUsers: () => Promise<void>
+  initializeUsers: () => Promise<void>
 }
 
 export const useUserStore = create<UserState>()(
@@ -44,9 +50,32 @@ export const useUserStore = create<UserState>()(
         searchQuery: '',
         selectedUser: null,
         isLoadingUser: false,
+        lastFetched: null,
+        cacheExpiry: 5 * 60 * 1000, // 5 minutes
+        isInitialized: false,
+
+        // Initialize users on first load
+        initializeUsers: async () => {
+          const { isInitialized, fetchUsers } = get()
+          if (!isInitialized) {
+            set({ isInitialized: true })
+            await fetchUsers(1, '', false)
+          }
+        },
 
         // Fetch users with pagination and search
-        fetchUsers: async (page = 1, search = '') => {
+        fetchUsers: async (page = 1, search = '', force = false) => {
+          const { lastFetched, cacheExpiry, currentPage, searchQuery, isLoading } = get()
+          
+          // Check if we should skip the API call
+          const now = Date.now()
+          const isCacheValid = lastFetched && (now - lastFetched) < cacheExpiry
+          const isSameRequest = currentPage === page && searchQuery === search
+          
+          if (!force && isCacheValid && isSameRequest && !isLoading) {
+            return // Skip API call if cache is valid and same request
+          }
+          
           set({ isLoading: true })
           
           try {
@@ -59,6 +88,7 @@ export const useUserStore = create<UserState>()(
               totalPages: response.data.pagination.pages,
               searchQuery: search,
               isLoading: false,
+              lastFetched: now,
             })
           } catch (error: any) {
             set({ isLoading: false })
@@ -73,7 +103,8 @@ export const useUserStore = create<UserState>()(
             await userService.createUser(userData)
             toast.success('User created successfully!')
             
-            // Refresh the user list to include the new user
+            // Invalidate cache to force refresh
+            get().invalidateCache()
             await get().refreshUsers()
           } catch (error: any) {
             toast.error(error.response?.data?.error || 'Failed to create user')
@@ -95,11 +126,9 @@ export const useUserStore = create<UserState>()(
             
             set({ 
               users: updatedUsers,
-              selectedUser: selectedUser?.id === id ? { ...selectedUser, ...userData } : selectedUser
+              selectedUser: selectedUser?.id === id ? { ...selectedUser, ...userData } : selectedUser,
+              lastFetched: Date.now(), // Update cache timestamp
             })
-            
-            // Optionally refresh to get server state
-            await get().refreshUsers()
           } catch (error: any) {
             toast.error(error.response?.data?.error || 'Failed to update user')
             throw error
@@ -119,11 +148,9 @@ export const useUserStore = create<UserState>()(
             set({ 
               users: filteredUsers,
               totalUsers: get().totalUsers - 1,
-              selectedUser: get().selectedUser?.id === id ? null : get().selectedUser
+              selectedUser: get().selectedUser?.id === id ? null : get().selectedUser,
+              lastFetched: Date.now(), // Update cache timestamp
             })
-            
-            // Refresh to ensure consistency
-            await get().refreshUsers()
           } catch (error: any) {
             toast.error(error.response?.data?.error || 'Failed to delete user')
             throw error
@@ -131,14 +158,26 @@ export const useUserStore = create<UserState>()(
         },
 
         // Fetch a single user
-        fetchUser: async (id: number) => {
+        fetchUser: async (id: number, force = false) => {
+          const { selectedUser, lastFetched, cacheExpiry, isLoadingUser } = get()
+          
+          // Check if we should skip the API call
+          const now = Date.now()
+          const isCacheValid = lastFetched && (now - lastFetched) < cacheExpiry
+          const isSameUser = selectedUser?.id === id
+          
+          if (!force && isCacheValid && isSameUser && !isLoadingUser) {
+            return // Skip API call if cache is valid and same user
+          }
+          
           set({ isLoadingUser: true })
           
           try {
             const response = await userService.getUser(id)
             set({ 
               selectedUser: response.data,
-              isLoadingUser: false 
+              isLoadingUser: false,
+              lastFetched: now,
             })
           } catch (error: any) {
             set({ isLoadingUser: false })
@@ -166,13 +205,15 @@ export const useUserStore = create<UserState>()(
             totalPages: 1,
             selectedUser: null,
             searchQuery: '',
+            lastFetched: null,
+            isInitialized: false,
           })
         },
 
         // Refresh users (re-fetch current page with current search)
         refreshUsers: async () => {
           const { currentPage, searchQuery } = get()
-          await get().fetchUsers(currentPage, searchQuery)
+          await get().fetchUsers(currentPage, searchQuery, true) // Force refresh
         },
       }),
       {
@@ -181,6 +222,8 @@ export const useUserStore = create<UserState>()(
         partialize: (state) => ({
           currentPage: state.currentPage,
           searchQuery: state.searchQuery,
+          lastFetched: state.lastFetched,
+          isInitialized: state.isInitialized,
         }),
       }
     ),
@@ -207,6 +250,9 @@ export const useUserSelectors = () => {
     
     // Check if currently loading any operation
     isAnyLoading: store.isLoading || store.isLoadingUser,
+    
+    // Check if cache is valid
+    isCacheValid: store.lastFetched && (Date.now() - store.lastFetched) < store.cacheExpiry,
     
     // Get pagination info
     paginationInfo: {
