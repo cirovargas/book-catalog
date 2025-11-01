@@ -1,8 +1,8 @@
-# AI Agent Guidelines for Book Catalog Project
+# AI Agent Guidelines for the project
 
 ## Project Overview
 
-This is a full-stack book catalog application with:
+This is a full-stack application with:
 - **Backend**: PHP 8.4 + Symfony 7.3 with Domain-Driven Design (DDD) architecture
 - **Frontend**: React Router 7 + TypeScript + TailwindCSS + Shadcn UI
 - **Database**: PostgreSQL with Doctrine ORM
