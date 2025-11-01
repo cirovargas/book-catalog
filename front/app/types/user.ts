@@ -41,13 +41,3 @@ export interface UserResponse {
   success: boolean
   data: User
 }
-
-export interface ApiErrorResponse {
-  success: false
-  error: string
-}
-
-export interface ApiSuccessResponse {
-  success: true
-  data: any
-}

@@ -87,10 +87,22 @@ class ApiService {
     if (error.config?.url?.includes('/login_check')) {
       return
     }
-    
+
     const message = error.response?.data?.error || error.message || 'An error occurred'
     toast.error(message)
   }
 }
+
+
+export interface ApiErrorResponse {
+  success: false
+  error: string
+}
+
+export interface ApiSuccessResponse<T> {
+  success: true
+  data: T
+}
+
 
 export const apiService = new ApiService()

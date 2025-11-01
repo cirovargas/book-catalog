@@ -1,12 +1,11 @@
-import { apiService } from './api'
+import {apiService, type ApiSuccessResponse} from './api'
 import { getUserFromToken, isTokenExpired } from '@/utils/jwt'
 import type {
   User,
   CreateUserRequest,
   UpdateUserRequest,
   UserListResponse,
-  UserResponse,
-  ApiSuccessResponse,
+  UserResponse
 } from '@/types/user'
 
 export class UserService {
@@ -32,16 +31,16 @@ export class UserService {
     return response.data
   }
 
-  async createUser(userData: CreateUserRequest): Promise<ApiSuccessResponse> {
-    return apiService.post<ApiSuccessResponse>('/users', userData)
+  async createUser(userData: CreateUserRequest): Promise<ApiSuccessResponse<string>> {
+    return apiService.post<ApiSuccessResponse<string>>('/users', userData)
   }
 
-  async updateUser(id: number, userData: UpdateUserRequest): Promise<ApiSuccessResponse> {
-    return apiService.put<ApiSuccessResponse>(`/users/${id}`, userData)
+  async updateUser(id: number, userData: UpdateUserRequest): Promise<ApiSuccessResponse<string>> {
+    return apiService.put<ApiSuccessResponse<string>>(`/users/${id}`, userData)
   }
 
-  async deleteUser(id: number): Promise<ApiSuccessResponse> {
-    return apiService.delete<ApiSuccessResponse>(`/users/${id}`)
+  async deleteUser(id: number): Promise<ApiSuccessResponse<string>> {
+    return apiService.delete<ApiSuccessResponse<string>>(`/users/${id}`)
   }
 
   async login(email: string, password: string): Promise<{ token: string; user: User }> {
