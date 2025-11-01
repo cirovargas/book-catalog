@@ -72,17 +72,17 @@ export default function DashboardHome() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Book Management</h4>
-              <div className="space-y-1">
-                <a href="/books" className="block text-sm text-blue-600 hover:underline">
-                  View all books
-                </a>
-                <a href="/books/create" className="block text-sm text-blue-600 hover:underline">
-                  Add new book
-                </a>
-              </div>
-            </div>
+            {/*<div className="space-y-2">*/}
+            {/*  <h4 className="text-sm font-medium">Book Management</h4>*/}
+            {/*  <div className="space-y-1">*/}
+            {/*    <a href="/books" className="block text-sm text-blue-600 hover:underline">*/}
+            {/*      View all books*/}
+            {/*    </a>*/}
+            {/*    <a href="/books/create" className="block text-sm text-blue-600 hover:underline">*/}
+            {/*      Add new book*/}
+            {/*    </a>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
 
             {isAdmin && (
               <div className="space-y-2">

@@ -12,7 +12,7 @@ modules:
           depends: Symfony
           part: Json
       - Db:
-          dsn: 'pgsql:host=postgres;dbname=bookstore_test'
-          user: 'bookstore'
+          dsn: 'pgsql:host=postgres;dbname=postgres_test'
+          user: 'postgres'
           password: '1234'
           cleanup: true
