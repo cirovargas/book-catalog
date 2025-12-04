@@ -142,6 +142,10 @@ const data = {
       icon: Settings2,
       items: [
         {
+          title: 'Communication Vehicle Types',
+          url: '/configurations/communication-vehicle-types'
+        },
+        {
           title: 'General',
           url: '#'
         },
@@ -172,8 +176,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isDev = import.meta.env.DEV
 
   // Filter navigation items based on environment
-  const navMainItems = isDev 
-    ? data.navMain 
+  const navMainItems = isDev
+    ? data.navMain
     : data.navMain.filter(item => item.title !== 'Theme Demo')
 
   return (

@@ -8,6 +8,9 @@ export default [
     route('users', 'pages/users/users.tsx'),
     route('users/create', 'pages/users/create-user.tsx'),
     route('users/:id', 'pages/users/user-detail.tsx'),
-    route('users/:id/edit', 'pages/users/edit-user.tsx')
+    route('users/:id/edit', 'pages/users/edit-user.tsx'),
+    route('configurations/communication-vehicle-types', 'pages/configurations/communication-vehicle-types/communication-vehicle-types.tsx'),
+    route('configurations/communication-vehicle-types/create', 'pages/configurations/communication-vehicle-types/create-communication-vehicle-type.tsx'),
+    route('configurations/communication-vehicle-types/:id/edit', 'pages/configurations/communication-vehicle-types/edit-communication-vehicle-type.tsx')
   ])
 ] satisfies RouteConfig
