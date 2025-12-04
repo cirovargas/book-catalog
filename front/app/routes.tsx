@@ -10,6 +10,7 @@ export default [
     route('users/:id', 'pages/users/user-detail.tsx'),
     route('users/:id/edit', 'pages/users/edit-user.tsx'),
     route('companies', 'pages/companies/companies.tsx'),
+    route('companies/preview', 'pages/companies/companies-preview.tsx'),
     route('companies/create', 'pages/companies/create-company.tsx'),
     route('companies/:id/edit', 'pages/companies/edit-company.tsx')
   ])

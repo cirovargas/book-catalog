@@ -16,7 +16,7 @@ import {
   Users,
   HomeIcon,
   Sun,
-  Building2,
+  Building2
 } from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main/nav-main'
@@ -50,7 +50,7 @@ const data = {
       title: 'Home',
       url: '/dashboard',
       icon: HomeIcon
-    },
+    }
     // {
     //   title: 'Playground',
     //   url: '#',
@@ -139,7 +139,6 @@ const data = {
     },
     {
       name: 'Empresas',
-      url: '#',
       icon: Building2,
       items: [
         {
@@ -149,25 +148,12 @@ const data = {
       ]
     },
     {
-      name: 'Settings',
-      url: '#',
+      name: 'Configurações',
       icon: Settings2,
       items: [
         {
-          title: 'General',
-          url: '#'
-        },
-        {
-          title: 'Team',
-          url: '#'
-        },
-        {
-          title: 'Billing',
-          url: '#'
-        },
-        {
-          title: 'Limits',
-          url: '#'
+          title: 'Veículos de comunicação',
+          url: '/communication-vehicle-types'
         }
       ]
     },
@@ -175,7 +161,7 @@ const data = {
       name: 'Theme',
       url: '/theme-demo',
       icon: Sun
-    },
+    }
   ]
 }
 

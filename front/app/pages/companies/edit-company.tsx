@@ -1,74 +1,79 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router'
-import { CompanyForm } from './components/company-form'
+import { useNavigate, useParams } from 'react-router'
+import { CompanyFormModal } from '@/components/companies/company-form-modal'
 import { useCompanies } from '@/hooks/use-companies'
-import type { UpdateCompanyRequest } from '@/types/company'
-import { Button } from '@/components/ui/button'
+import type { CreateCompanyRequest } from '@/types/company'
+import { toast } from 'react-hot-toast'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
-import { ArrowLeft } from 'lucide-react'
 
 export default function EditCompany() {
-  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const { selectedCompany, fetchCompany, updateCompany } = useCompanies()
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const { selectedCompany, isLoadingCompany, fetchCompany, updateCompany } = useCompanies()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (id) {
-      fetchCompany(parseInt(id))
-    }
-  }, [id, fetchCompany])
+    const loadCompany = async () => {
+      if (!id) {
+        navigate('/companies')
+        return
+      }
 
-  const handleSubmit = async (data: UpdateCompanyRequest) => {
-    if (!selectedCompany) return
+      try {
+        setIsLoading(true)
+        await fetchCompany(parseInt(id), true)
+      } catch (error) {
+        toast.error('Erro ao carregar empresa')
+        navigate('/companies')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadCompany()
+  }, [id, fetchCompany, navigate])
+
+  const handleClose = () => {
+    navigate('/companies')
+  }
+
+  const handleSubmit = async (data: CreateCompanyRequest) => {
+    if (!id) return
 
     try {
       setIsSubmitting(true)
-      await updateCompany(selectedCompany.id, data)
+      // Remove generateUser from data for update
+      const { generateUser, ...updateData } = data
+      await updateCompany(parseInt(id), updateData)
+      toast.success('Empresa atualizada com sucesso!')
       navigate('/companies')
     } catch (error: any) {
-      // Error handling is done in the store
+      const errorMessage = error?.response?.data?.error || 'Erro ao atualizar empresa'
+      toast.error(errorMessage)
+      throw error // Re-throw to prevent form reset
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  if (isLoadingCompany) {
+  if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <LoadingSpinner size="md" />
-      </div>
-    )
-  }
-
-  if (!selectedCompany) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <div className="text-gray-500">Empresa não encontrada</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <LoadingSpinner size="lg" />
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="sm" onClick={() => navigate('/companies')}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Voltar
-        </Button>
-      </div>
-
-      <div>
-        <h1 className="text-3xl font-bold">Editar Empresa</h1>
-        <p className="text-gray-600 dark:text-gray-400">Atualizar informações da empresa</p>
-      </div>
-
-      <CompanyForm
-        mode="edit"
-        company={selectedCompany}
+    <div className="min-h-screen bg-background">
+      <CompanyFormModal
+        open={true}
+        onClose={handleClose}
         onSubmit={handleSubmit}
-        isLoading={isSubmitting}
+        mode="edit"
+        initialData={selectedCompany}
+        isSubmitting={isSubmitting}
       />
     </div>
   )

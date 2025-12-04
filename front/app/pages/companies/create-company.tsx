@@ -1,37 +1,43 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { CompanyForm } from './components/company-form'
+import { CompanyFormModal } from '@/components/companies/company-form-modal'
 import { useCompanies } from '@/hooks/use-companies'
-import type { CreateCompanyRequest, UpdateCompanyRequest } from '@/types/company'
+import type { CreateCompanyRequest } from '@/types/company'
+import { toast } from 'react-hot-toast'
 
 export default function CreateCompany() {
-  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
-
   const { createCompany } = useCompanies()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (data: CreateCompanyRequest | UpdateCompanyRequest) => {
+  const handleClose = () => {
+    navigate('/companies')
+  }
+
+  const handleSubmit = async (data: CreateCompanyRequest) => {
     try {
-      setIsLoading(true)
-      await createCompany(data as CreateCompanyRequest)
+      setIsSubmitting(true)
+      await createCompany(data)
+      toast.success('Empresa cadastrada com sucesso!')
       navigate('/companies')
     } catch (error: any) {
-      // Error handling is done in the store
+      const errorMessage = error?.response?.data?.error || 'Erro ao cadastrar empresa'
+      toast.error(errorMessage)
+      throw error // Re-throw to prevent form reset
     } finally {
-      setIsLoading(false)
+      setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Cadastrar Empresa</h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Adicionar uma nova empresa ao sistema
-        </p>
-      </div>
-
-      <CompanyForm mode="create" onSubmit={handleSubmit} isLoading={isLoading} />
+    <div className="min-h-screen bg-background">
+      <CompanyFormModal
+        open={true}
+        onClose={handleClose}
+        onSubmit={handleSubmit}
+        mode="create"
+        isSubmitting={isSubmitting}
+      />
     </div>
   )
 }

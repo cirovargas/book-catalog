@@ -116,7 +116,6 @@ export const useCompanyStore = create<CompanyState>()(
         updateCompany: async (id: number, companyData: UpdateCompanyRequest) => {
           try {
             await companyService.update(id, companyData)
-            toast.success('Company updated successfully!')
 
             // Update the company in the local state
             const { companies, selectedCompany } = get()
