@@ -15,7 +15,8 @@ import {
   SquareTerminal,
   Users,
   HomeIcon,
-  Sun
+  Sun,
+  Building2,
 } from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main/nav-main'
@@ -137,6 +138,17 @@ const data = {
       icon: Users
     },
     {
+      name: 'Empresas',
+      url: '#',
+      icon: Building2,
+      items: [
+        {
+          title: 'Gerenciar',
+          url: '/companies'
+        }
+      ]
+    },
+    {
       name: 'Settings',
       url: '#',
       icon: Settings2,
@@ -172,8 +184,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const isDev = import.meta.env.DEV
 
   // Filter navigation items based on environment
-  const navMainItems = isDev 
-    ? data.navMain 
+  const navMainItems = isDev
+    ? data.navMain
     : data.navMain.filter(item => item.title !== 'Theme Demo')
 
   return (

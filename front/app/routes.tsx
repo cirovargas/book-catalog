@@ -8,6 +8,9 @@ export default [
     route('users', 'pages/users/users.tsx'),
     route('users/create', 'pages/users/create-user.tsx'),
     route('users/:id', 'pages/users/user-detail.tsx'),
-    route('users/:id/edit', 'pages/users/edit-user.tsx')
+    route('users/:id/edit', 'pages/users/edit-user.tsx'),
+    route('companies', 'pages/companies/companies.tsx'),
+    route('companies/create', 'pages/companies/create-company.tsx'),
+    route('companies/:id/edit', 'pages/companies/edit-company.tsx')
   ])
 ] satisfies RouteConfig
