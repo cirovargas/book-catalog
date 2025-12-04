@@ -1,3 +1,5 @@
+export type CommunicationVehicleTypeStatus = 'active' | 'inactive'
+
 export interface CommunicationVehicleType {
   id: number
   name: string

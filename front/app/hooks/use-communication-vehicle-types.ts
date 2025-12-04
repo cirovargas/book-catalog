@@ -1,42 +1,70 @@
 import { useEffect } from 'react'
-import {
-  useCommunicationVehicleTypeStore,
-  useCommunicationVehicleTypeSelectors,
-} from '@/stores/communication-vehicle-type-store'
+import { useCommunicationVehicleTypeStore } from '@/stores/communication-vehicle-type-store'
 
 export const useCommunicationVehicleTypes = () => {
-  const store = useCommunicationVehicleTypeStore()
-  const selectors = useCommunicationVehicleTypeSelectors()
+  // Get state and actions using proper Zustand selectors
+  const communicationVehicleTypes = useCommunicationVehicleTypeStore((state) => state.communicationVehicleTypes)
+  const selectedCommunicationVehicleType = useCommunicationVehicleTypeStore((state) => state.selectedCommunicationVehicleType)
+  const isLoading = useCommunicationVehicleTypeStore((state) => state.isLoading)
+  const isLoadingItem = useCommunicationVehicleTypeStore((state) => state.isLoadingItem)
+  const searchQuery = useCommunicationVehicleTypeStore((state) => state.searchQuery)
+  const currentPage = useCommunicationVehicleTypeStore((state) => state.currentPage)
+  const totalPages = useCommunicationVehicleTypeStore((state) => state.totalPages)
+  const totalItems = useCommunicationVehicleTypeStore((state) => state.totalItems)
+  const lastFetched = useCommunicationVehicleTypeStore((state) => state.lastFetched)
+  const cacheExpiry = useCommunicationVehicleTypeStore((state) => state.cacheExpiry)
+
+  // Get actions
+  const fetchAll = useCommunicationVehicleTypeStore((state) => state.fetchAll)
+  const fetchById = useCommunicationVehicleTypeStore((state) => state.fetchById)
+  const create = useCommunicationVehicleTypeStore((state) => state.create)
+  const update = useCommunicationVehicleTypeStore((state) => state.update)
+  const deleteItem = useCommunicationVehicleTypeStore((state) => state.delete)
+  const setSearchQuery = useCommunicationVehicleTypeStore((state) => state.setSearchQuery)
+  const clearSelected = useCommunicationVehicleTypeStore((state) => state.clearSelected)
+  const refresh = useCommunicationVehicleTypeStore((state) => state.refresh)
+  const invalidateCache = useCommunicationVehicleTypeStore((state) => state.invalidateCache)
+  const initialize = useCommunicationVehicleTypeStore((state) => state.initialize)
 
   useEffect(() => {
     // Initialize on first load
-    store.initialize()
-  }, [])
+    initialize()
+  }, [initialize])
+
+  // Computed values
+  const hasItems = communicationVehicleTypes.length > 0
+  const isCacheValid = lastFetched && Date.now() - lastFetched < cacheExpiry
+  const paginationInfo = {
+    currentPage,
+    totalPages,
+    totalItems,
+    hasNextPage: currentPage < totalPages,
+    hasPrevPage: currentPage > 1,
+  }
 
   return {
     // State
-    communicationVehicleTypes: store.communicationVehicleTypes,
-    selectedCommunicationVehicleType: store.selectedCommunicationVehicleType,
-    isLoading: store.isLoading,
-    isLoadingItem: store.isLoadingItem,
-    searchQuery: store.searchQuery,
-    currentPage: store.currentPage,
+    communicationVehicleTypes,
+    selectedCommunicationVehicleType,
+    isLoading,
+    isLoadingItem,
+    searchQuery,
+    currentPage,
 
     // Computed values
-    hasItems: selectors.hasItems,
-    isCacheValid: selectors.isCacheValid,
-    paginationInfo: selectors.paginationInfo,
+    hasItems,
+    isCacheValid,
+    paginationInfo,
 
     // Actions
-    fetchAll: store.fetchAll,
-    fetchById: store.fetchById,
-    create: store.create,
-    update: store.update,
-    delete: store.delete,
-    setSearchQuery: store.setSearchQuery,
-    clearSelected: store.clearSelected,
-    refresh: store.refresh,
-    invalidateCache: store.invalidateCache,
+    fetchAll,
+    fetchById,
+    create,
+    update,
+    delete: deleteItem,
+    setSearchQuery,
+    clearSelected,
+    refresh,
+    invalidateCache,
   }
 }
-
