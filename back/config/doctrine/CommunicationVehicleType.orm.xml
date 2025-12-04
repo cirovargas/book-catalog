@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Entity\CommunicationVehicleType" table="communication_vehicle_types" repository-class="App\Repository\CommunicationVehicleTypeRepository">
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="name" type="string" column="name" length="100" nullable="false"/>
+        <field name="description" type="text" column="description" nullable="true"/>
+        <field name="status" type="string" column="status" length="20" nullable="false"/>
+    </entity>
+
+</doctrine-mapping>
+

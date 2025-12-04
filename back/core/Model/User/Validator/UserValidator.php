@@ -46,7 +46,7 @@ class UserValidator
         $validRoles = ['ROLE_USER', 'ROLE_ADMIN'];
         foreach ($roles as $role) {
             if (!in_array($role, $validRoles, true)) {
-                throw new \InvalidArgumentException('Invalid role: ' . $role);
+                throw new \InvalidArgumentException('Invalid role: '.$role);
             }
         }
     }

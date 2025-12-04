@@ -47,9 +47,11 @@ services:
     DDD\Model\Author\Repository\AuthorRepositoryInterface: '@App\Repository\AuthorRepository'
     DDD\Model\Category\Repository\CategoryRepositoryInterface: '@App\Repository\CategoryRepository'
     DDD\Model\User\Repository\UserRepositoryInterface: '@App\Repository\UserRepository'
+    DDD\Model\CommunicationVehicleType\Repository\CommunicationVehicleTypeRepositoryInterface: '@App\Repository\CommunicationVehicleTypeRepository'
     DDD\Model\User\Service\UserFactory: '@App\Service\UserFactory'
 
     DDD\Model\Subject\Service\SubjectFactory: '@App\Service\SubjectFactory'
     DDD\Model\Author\Service\AuthorFactory: '@App\Service\AuthorFactory'
     DDD\Model\Book\Service\BookFactory: '@App\Service\BookFactory'
     DDD\Model\Category\Service\CategoryFactory: '@App\Service\CategoryFactory'
+    DDD\Model\CommunicationVehicleType\Service\CommunicationVehicleTypeFactory: '@App\Service\CommunicationVehicleTypeFactory'
