@@ -26,7 +26,7 @@ class CreateUserHandler
             throw new UserEmailAlreadyExistsException();
         }
 
-        $plainPassword = random_int(1, 9) . random_int(1, 9) . random_int(1, 9) . random_int(1, 9) . random_int(1, 9) . random_int(1, 9);
+        $plainPassword = random_int(1, 9).random_int(1, 9).random_int(1, 9).random_int(1, 9).random_int(1, 9).random_int(1, 9);
 
         $user = $this->userFactory->createWithPlainPassword(
             $command->getEmail(),
