@@ -16,4 +16,3 @@ class DeleteCompanyCommand
         return $this->id;
     }
 }
-

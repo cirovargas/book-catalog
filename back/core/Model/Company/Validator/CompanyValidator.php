@@ -8,24 +8,53 @@ use DDD\Model\Company\Exception\InvalidCnpjException;
 
 class CompanyValidator
 {
+    public function validateEmail(string $email): void
+    {
+        if (!filter_var($email, \FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('Invalid email format');
+        }
+    }
+
     public function validateCnpj(string $cnpj): void
     {
         // Remove non-numeric characters
-        $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+        $cnpj = (string) preg_replace('/[^0-9]/', '', $cnpj);
 
         // Check if it has 14 digits
-        if (strlen($cnpj) !== 14) {
+        if (14 !== strlen((string) $cnpj)) {
             throw new InvalidCnpjException('CNPJ must have 14 digits');
         }
 
         // Check for known invalid sequences (all same digits)
-        if (preg_match('/^(\d)\1{13}$/', $cnpj)) {
+        if (preg_match('/^(\d)\1{13}$/', (string) $cnpj)) {
             throw new InvalidCnpjException('CNPJ cannot be a sequence of repeated digits');
         }
 
         // Validate check digits
         if (!$this->validateCnpjCheckDigits($cnpj)) {
             throw new InvalidCnpjException('Invalid CNPJ check digits');
+        }
+    }
+
+    public function validateCep(string $cep): void
+    {
+        $cep = (string) preg_replace('/[^0-9]/', '', $cep);
+
+        if (8 !== strlen((string) $cep)) {
+            throw new \InvalidArgumentException('CEP must have 8 digits');
+        }
+    }
+
+    public function validateState(string $state): void
+    {
+        $validStates = [
+            'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+            'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
+            'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
+        ];
+
+        if (!\in_array(strtoupper($state), $validStates, true)) {
+            throw new \InvalidArgumentException('Invalid Brazilian state (UF)');
         }
     }
 
@@ -60,4 +89,3 @@ class CompanyValidator
         return (int) $cnpj[13] === $secondCheckDigit;
     }
 }
-

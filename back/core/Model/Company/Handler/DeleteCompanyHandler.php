@@ -27,4 +27,3 @@ class DeleteCompanyHandler
         $this->companyRepository->delete($company);
     }
 }
-

@@ -11,4 +11,3 @@ class CompanyNameRequiredException extends \Exception
         parent::__construct('Company name is required');
     }
 }
-

@@ -59,6 +59,18 @@ services:
     networks:
       - local-dev
 
+  mailhog:
+    image: 'mailhog/mailhog:latest'
+    expose:
+      - '1025'
+      - '8025'
+    ports:
+      - '1026:1025'
+      - '8026:8025'
+    restart: unless-stopped
+    networks:
+      - local-dev
+
 networks:
   local-dev:
 

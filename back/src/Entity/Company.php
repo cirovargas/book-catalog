@@ -9,4 +9,3 @@ use DDD\Model\Company\Company as BaseModel;
 class Company extends BaseModel
 {
 }
-

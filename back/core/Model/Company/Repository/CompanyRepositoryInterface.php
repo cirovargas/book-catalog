@@ -28,8 +28,8 @@ interface CompanyRepositoryInterface extends AbstractRepository
         int $page = 1,
         int $limit = 10,
         ?string $search = null,
-        ?string $cnpj = null,
-        ?string $status = 'active'
+        ?int $communicationVehicleTypeId = null,
+        ?string $status = 'active',
     ): array;
 
     /**

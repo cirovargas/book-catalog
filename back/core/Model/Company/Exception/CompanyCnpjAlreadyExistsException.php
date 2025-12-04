@@ -6,9 +6,8 @@ namespace DDD\Model\Company\Exception;
 
 class CompanyCnpjAlreadyExistsException extends \Exception
 {
-    public function __construct()
+    public function __construct(string $cnpj)
     {
-        parent::__construct('A company with this CNPJ already exists');
+        parent::__construct(sprintf('Company with CNPJ %s already exists', $cnpj));
     }
 }
-

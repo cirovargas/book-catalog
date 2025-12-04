@@ -8,10 +8,23 @@
         <id name="id" type="integer" column="id">
             <generator strategy="IDENTITY"/>
         </id>
+        <field name="cnpj" type="string" column="cnpj" length="14" nullable="false" unique="true"/>
         <field name="corporateName" type="string" column="corporate_name" length="255" nullable="false"/>
         <field name="tradeName" type="string" column="trade_name" length="255" nullable="false"/>
-        <field name="cnpj" type="string" column="cnpj" length="14" nullable="false" unique="true"/>
+        <field name="email" type="string" column="email" length="255" nullable="false"/>
+        <field name="phone" type="string" column="phone" length="20" nullable="true"/>
+        <field name="mobile" type="string" column="mobile" length="20" nullable="true"/>
+        <field name="responsibleName" type="string" column="responsible_name" length="255" nullable="true"/>
+        <field name="communicationVehicleTypeId" type="integer" column="communication_vehicle_type_id" nullable="false"/>
+        <field name="cep" type="string" column="cep" length="8" nullable="true"/>
+        <field name="street" type="string" column="street" length="255" nullable="true"/>
+        <field name="number" type="string" column="number" length="20" nullable="true"/>
+        <field name="neighborhood" type="string" column="neighborhood" length="255" nullable="true"/>
+        <field name="complement" type="string" column="complement" length="255" nullable="true"/>
+        <field name="state" type="string" column="state" length="2" nullable="true"/>
+        <field name="city" type="string" column="city" length="255" nullable="true"/>
         <field name="status" type="string" column="status" length="20" nullable="false"/>
+        <field name="userId" type="integer" column="user_id" nullable="true"/>
         <field name="createdAt" type="datetime_immutable" column="created_at" nullable="true"/>
         <field name="updatedAt" type="datetime_immutable" column="updated_at" nullable="true"/>
     </entity>

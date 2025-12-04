@@ -34,8 +34,8 @@ class CompanyRepository extends ServiceEntityRepository implements CompanyReposi
         int $page = 1,
         int $limit = 10,
         ?string $search = null,
-        ?string $cnpj = null,
-        ?string $status = 'active'
+        ?int $communicationVehicleTypeId = null,
+        ?string $status = 'active',
     ): array {
         $queryBuilder = $this->createQueryBuilder('c');
 
@@ -45,17 +45,16 @@ class CompanyRepository extends ServiceEntityRepository implements CompanyReposi
                 ->setParameter('status', $status);
         }
 
-        // Search by corporate name or trade name
+        // Search by corporate name, trade name, or CNPJ
         if (null !== $search && '' !== $search) {
-            $queryBuilder->andWhere('c.corporateName LIKE :search OR c.tradeName LIKE :search')
-                ->setParameter('search', '%'.$search.'%');
+            $queryBuilder->andWhere('c.corporateName LIKE :search OR c.tradeName LIKE :search OR c.cnpj LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
         }
 
-        // Filter by CNPJ
-        if (null !== $cnpj && '' !== $cnpj) {
-            $normalizedCnpj = preg_replace('/[^0-9]/', '', $cnpj);
-            $queryBuilder->andWhere('c.cnpj LIKE :cnpj')
-                ->setParameter('cnpj', '%'.$normalizedCnpj.'%');
+        // Filter by Communication Vehicle Type
+        if (null !== $communicationVehicleTypeId) {
+            $queryBuilder->andWhere('c.communicationVehicleTypeId = :typeId')
+                ->setParameter('typeId', $communicationVehicleTypeId);
         }
 
         // Get total count
@@ -63,6 +62,7 @@ class CompanyRepository extends ServiceEntityRepository implements CompanyReposi
         $total = (int) $totalQb->select('COUNT(c.id)')->getQuery()->getSingleScalarResult();
 
         // Get paginated results
+        /** @var list<Company> $companies */
         $companies = $queryBuilder->select('c')
             ->orderBy('c.id', 'DESC')
             ->setFirstResult(($page - 1) * $limit)

@@ -27,6 +27,7 @@ class UpdateCompanyHandler
             throw new CompanyNotFoundException();
         }
 
+        // Validate required fields
         if ('' === trim($command->getCorporateName())) {
             throw new CompanyNameRequiredException();
         }
@@ -35,12 +36,28 @@ class UpdateCompanyHandler
             throw new CompanyNameRequiredException();
         }
 
-        // Validate CNPJ
-        $this->companyValidator->validateCnpj($command->getCnpj());
+        // Validate email
+        $this->companyValidator->validateEmail($command->getEmail());
 
+        // Validate CEP and State
+        $this->companyValidator->validateCep($command->getCep());
+        $this->companyValidator->validateState($command->getState());
+
+        // Update company fields (CNPJ is immutable, so we don't update it)
         $company->setCorporateName($command->getCorporateName());
         $company->setTradeName($command->getTradeName());
-        $company->setCnpj($command->getCnpj());
+        $company->setEmail($command->getEmail());
+        $company->setCommunicationVehicleTypeId($command->getCommunicationVehicleTypeId());
+        $company->setCep($command->getCep());
+        $company->setStreet($command->getStreet());
+        $company->setNumber($command->getNumber());
+        $company->setNeighborhood($command->getNeighborhood());
+        $company->setState($command->getState());
+        $company->setCity($command->getCity());
+        $company->setPhone($command->getPhone());
+        $company->setMobile($command->getMobile());
+        $company->setResponsibleName($command->getResponsibleName());
+        $company->setComplement($command->getComplement());
         $company->setStatus($command->getStatus());
 
         $this->companyRepository->save($company);

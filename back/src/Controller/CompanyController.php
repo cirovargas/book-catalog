@@ -10,6 +10,7 @@ use DDD\Model\Company\Command\CreateCompanyCommand;
 use DDD\Model\Company\Command\DeleteCompanyCommand;
 use DDD\Model\Company\Command\UpdateCompanyCommand;
 use DDD\Model\Company\Company;
+use DDD\Model\Company\Exception\CompanyCnpjAlreadyExistsException;
 use DDD\Model\Company\Exception\CompanyNameRequiredException;
 use DDD\Model\Company\Exception\CompanyNotFoundException;
 use DDD\Model\Company\Exception\InvalidCnpjException;
@@ -35,10 +36,13 @@ class CompanyController extends AbstractController
         $page = max(1, (int) $request->query->get('page', 1));
         $limit = min(100, max(1, (int) $request->query->get('limit', 10)));
         $search = $request->query->get('search');
-        $cnpj = $request->query->get('cnpj');
+        $searchString = is_string($search) ? $search : null;
+        $vehicleTypeId = $request->query->get('vehicleTypeId');
+        $vehicleTypeIdInt = is_numeric($vehicleTypeId) ? (int) $vehicleTypeId : null;
         $status = $request->query->get('status', 'active');
+        $statusString = is_string($status) ? $status : 'active';
 
-        $result = $this->companyRepository->getPaginated($page, $limit, $search, $cnpj, $status);
+        $result = $this->companyRepository->getPaginated($page, $limit, $searchString, $vehicleTypeIdInt, $statusString);
 
         return $this->jsonSuccessResponse([
             'companies' => $result['companies'],
@@ -95,6 +99,8 @@ class CompanyController extends AbstractController
             return $this->jsonNotFoundResponse('Empresa não encontrada');
         } catch (CompanyNameRequiredException) {
             return $this->jsonErrorResponse('Os campos de nome são obrigatórios', Response::HTTP_BAD_REQUEST);
+        } catch (CompanyCnpjAlreadyExistsException $e) {
+            return $this->jsonErrorResponse($e->getMessage(), Response::HTTP_CONFLICT);
         } catch (InvalidCnpjException $e) {
             return $this->jsonErrorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         } catch (BadJsonBodyException) {
