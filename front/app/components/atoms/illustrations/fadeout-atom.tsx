@@ -9,10 +9,10 @@ export interface FadeoutAtomProps {
 
 // Figma specs: 40px height, backdrop blur, gradient from transparent to background
 export const FadeoutAtom: FC<FadeoutAtomProps> = ({
-  direction = 'bottom',
-  height = '40px',
-  className,
-}) => {
+                                                    direction = 'bottom',
+                                                    height = '40px',
+                                                    className
+                                                  }) => {
   const gradientId = useId()
 
   const getGradient = () => {
@@ -22,28 +22,28 @@ export const FadeoutAtom: FC<FadeoutAtomProps> = ({
           x1: '0%',
           y1: '0%',
           x2: '0%',
-          y2: '100%',
+          y2: '100%'
         }
       case 'bottom':
         return {
           x1: '0%',
           y1: '0%',
           x2: '0%',
-          y2: '100%',
+          y2: '100%'
         }
       case 'left':
         return {
           x1: '0%',
           y1: '0%',
           x2: '100%',
-          y2: '0%',
+          y2: '0%'
         }
       case 'right':
         return {
           x1: '0%',
           y1: '0%',
           x2: '100%',
-          y2: '0%',
+          y2: '0%'
         }
     }
   }
@@ -73,7 +73,7 @@ export const FadeoutAtom: FC<FadeoutAtomProps> = ({
         height: heightValue,
         backgroundImage: isVertical
           ? `linear-gradient(${direction === 'bottom' ? '180deg' : '0deg'}, transparent 2.56%, hsl(var(--background)) 52.13%)`
-          : `linear-gradient(${direction === 'right' ? '90deg' : '270deg'}, transparent 2.56%, hsl(var(--background)) 52.13%)`,
+          : `linear-gradient(${direction === 'right' ? '90deg' : '270deg'}, transparent 2.56%, hsl(var(--background)) 52.13%)`
       }}
       role="img"
       aria-label={`Fade out: ${direction}`}

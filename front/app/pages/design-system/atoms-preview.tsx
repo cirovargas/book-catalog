@@ -7,7 +7,7 @@ import {
   FadeoutAtom,
   LogoAtom,
   TEAM_FLAGS,
-  type TeamFlagVariant,
+  type TeamFlagVariant
 } from '@/components/atoms/illustrations'
 
 export default function AtomsPreview() {
