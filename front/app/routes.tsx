@@ -8,6 +8,7 @@ export default [
     route('users', 'pages/users/users.tsx'),
     route('users/create', 'pages/users/create-user.tsx'),
     route('users/:id', 'pages/users/user-detail.tsx'),
-    route('users/:id/edit', 'pages/users/edit-user.tsx')
+    route('users/:id/edit', 'pages/users/edit-user.tsx'),
+    route('design-system/atoms-preview', 'pages/design-system/atoms-preview.tsx')
   ])
 ] satisfies RouteConfig
