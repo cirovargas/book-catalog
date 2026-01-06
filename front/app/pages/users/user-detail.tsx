@@ -1,52 +1,50 @@
 import { useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { LoadingSpinner } from '@/components/ui/loading-spinner'
-import { useUsers } from '@/hooks/use-users'
-import { 
-  Edit, 
-  Trash2, 
+import {
+  Edit,
   ArrowLeft,
   Mail,
   Calendar,
   Shield
 } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { useUsers } from '@/hooks/use-users'
+import { DeleteButton } from '@/components/crud/delete-button'
+
+import { CrudDetailLayout } from '@/components/crud/crud-layouts'
+import { CrudPageHeader } from '@/components/crud/crud-page-header'
+
 export default function UserDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
 
-  const { selectedUser, isLoadingUser, fetchUser, deleteUser } = useUsers()
+  const { selectedUser, isLoadingUser, fetchUser, deleteUser } =
+    useUsers()
 
   useEffect(() => {
     if (id) {
-      fetchUser(parseInt(id))
+      fetchUser(parseInt(id, 10))
     }
   }, [id, fetchUser])
 
-  const handleDelete = async () => {
-    if (!selectedUser || !confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-      return
-    }
-
-    try {
-      await deleteUser(selectedUser.id)
-      navigate('/users')
-    } catch (error) {
-      // Error handling is done in the store
-    }
-  }
-
-  const formatDate = (dateString?: string) => {
+  function formatDate(dateString?: string) {
     if (!dateString) return 'N/A'
     return new Date(dateString).toLocaleString()
   }
 
-  const getRoleBadgeVariant = (roles: string[]) => {
+  function getRoleBadgeVariant(roles: string[]) {
     if (roles.includes('ROLE_ADMIN')) return 'destructive'
     return 'secondary'
+  }
+
+  async function handleDelete() {
+    if (!selectedUser) return
+    await deleteUser(selectedUser.id)
+    navigate('/users')
   }
 
   if (isLoadingUser) {
@@ -60,71 +58,85 @@ export default function UserDetail() {
   if (!selectedUser) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-gray-500">User not found</div>
+        <div className="text-sm text-muted-foreground">
+          User not found
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate('/users')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Users
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold">User Details</h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              View and manage user information
-            </p>
+    <CrudDetailLayout
+      header={
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              type="button"
+              onClick={() => navigate('/users')}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
+              Back to Users
+            </Button>
+
+            <CrudPageHeader
+              title="User Details"
+              description="View and manage user information"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link to={`/users/${selectedUser.id}/edit`}>
+              <Button variant="outline" type="button">
+                <Edit className="mr-2 h-4 w-4" aria-hidden="true" />
+                Edit
+              </Button>
+            </Link>
+
+            <DeleteButton
+              onConfirm={handleDelete}
+              title="Delete user"
+              description="Are you sure you want to delete this user? This action cannot be undone."
+            >
+              Delete
+            </DeleteButton>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Link to={`/users/${selectedUser.id}/edit`}>
-            <Button variant="outline">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
-          </Link>
-          <Button 
-            variant="destructive" 
-            onClick={handleDelete}
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            Delete
-          </Button>
-        </div>
-      </div>
-
+      }
+    >
       <div className="grid gap-6 md:grid-cols-2">
         {/* Basic Information */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <Mail className="h-5 w-5 mr-2" />
+            <CardTitle className="flex items-center gap-2">
+              <Mail className="h-5 w-5" aria-hidden="true" />
               Basic Information
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <span className="text-xs font-medium uppercase text-muted-foreground">
                 User ID
-              </label>
+              </span>
               <p className="text-lg font-medium">{selectedUser.id}</p>
             </div>
+
             <div>
-              <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <span className="text-xs font-medium uppercase text-muted-foreground">
                 Email Address
-              </label>
+              </span>
               <p className="text-lg font-medium">{selectedUser.email}</p>
             </div>
+
             {selectedUser.name && (
               <div>
-                <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <span className="text-xs font-medium uppercase text-muted-foreground">
                   Full Name
-                </label>
-                <p className="text-lg font-medium">{selectedUser.name}</p>
+                </span>
+                <p className="text-lg font-medium">
+                  {selectedUser.name}
+                </p>
               </div>
             )}
           </CardContent>
@@ -133,20 +145,20 @@ export default function UserDetail() {
         {/* Roles & Permissions */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <Shield className="h-5 w-5 mr-2" />
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5" aria-hidden="true" />
               Roles & Permissions
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div>
-              <label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2 block">
+              <span className="mb-2 block text-xs font-medium uppercase text-muted-foreground">
                 Assigned Roles
-              </label>
+              </span>
               <div className="flex flex-wrap gap-2">
                 {selectedUser.roles.map((role) => (
-                  <Badge 
-                    key={role} 
+                  <Badge
+                    key={role}
                     variant={getRoleBadgeVariant(selectedUser.roles)}
                   >
                     {role.replace('ROLE_', '')}
@@ -157,32 +169,37 @@ export default function UserDetail() {
           </CardContent>
         </Card>
 
-        {/* Timestamps */}
+        {/* Timeline */}
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <Calendar className="h-5 w-5 mr-2" />
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" aria-hidden="true" />
               Timeline
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <span className="text-xs font-medium uppercase text-muted-foreground">
                   Created At
-                </label>
-                <p className="text-lg font-medium">{formatDate(selectedUser.createdAt)}</p>
+                </span>
+                <p className="text-lg font-medium">
+                  {formatDate(selectedUser.createdAt)}
+                </p>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <span className="text-xs font-medium uppercase text-muted-foreground">
                   Last Updated
-                </label>
-                <p className="text-lg font-medium">{formatDate(selectedUser.updatedAt)}</p>
+                </span>
+                <p className="text-lg font-medium">
+                  {formatDate(selectedUser.updatedAt)}
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
-    </div>
+    </CrudDetailLayout>
   )
 }
+
