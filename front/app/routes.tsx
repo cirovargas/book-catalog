@@ -10,6 +10,7 @@ export default [
     route('users/:id', 'pages/users/user-detail.tsx'),
     route('users/:id/edit', 'pages/users/edit-user.tsx'),
     route('design-system/atoms-preview', 'pages/design-system/atoms-preview.tsx'),
-    route('design-system/components', 'pages/design-system/components-gallery.tsx')
+    route('design-system/components', 'pages/design-system/components-gallery.tsx'),
+    route('playground/crud-preview', 'pages/playground/crud-preview.tsx')
   ])
 ] satisfies RouteConfig

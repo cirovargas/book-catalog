@@ -96,3 +96,4 @@ RowPresetWithAvatar.displayName = 'RowPresetWithAvatar'
 // Backwards compatibility export
 export { RowPresetWithAvatar as RowCredenciamentoPessoas }
 export type { RowPresetWithAvatarProps as RowCredenciamentoPessoasProps }
+

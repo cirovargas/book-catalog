@@ -55,3 +55,4 @@ RowPresetWithActions.displayName = 'RowPresetWithActions'
 // Backwards compatibility export
 export { RowPresetWithActions as RowCredenciamento2 }
 export type { RowPresetWithActionsProps as RowCredenciamento2Props }
+
