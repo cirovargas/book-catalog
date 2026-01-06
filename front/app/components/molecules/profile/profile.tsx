@@ -78,9 +78,9 @@ export const ProfileMolecule = React.forwardRef<HTMLDivElement, ProfileMoleculeP
                 {user.name && <span className="text-xs text-muted-foreground truncate w-full">{user.email}</span>}
               </div>
               {open ? (
-                <ChevronRight className="ml-auto size-4 shrink-0" />
+                <ChevronDown className="ml-auto size-4 shrink-0 rotate-180 transition-transform" />
               ) : (
-                <ChevronDown className="ml-auto size-4 shrink-0" />
+                <ChevronDown className="ml-auto size-4 shrink-0 transition-transform" />
               )}
             </button>
           </DropdownMenuTrigger>

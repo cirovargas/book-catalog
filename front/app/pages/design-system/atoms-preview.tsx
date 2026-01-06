@@ -5,13 +5,10 @@ import {
   IllustrationAtom,
   GraphicsAtom,
   FadeoutAtom,
-  LogoAtom,
-  TEAM_FLAGS,
-  type TeamFlagVariant
+  LogoAtom
 } from '@/components/atoms/illustrations'
 
 export default function AtomsPreview() {
-  const teamFlagVariants: TeamFlagVariant[] = Object.keys(TEAM_FLAGS) as TeamFlagVariant[]
 
   const illustrationVariants: Array<{ variant: Parameters<typeof IllustrationAtom>[0]['variant'] }> = [
     { variant: 'captain-armband' },
@@ -59,40 +56,38 @@ export default function AtomsPreview() {
       <Card>
         <CardHeader>
           <CardTitle>Team Flags</CardTitle>
-          <CardDescription>Team flag icons with size variants</CardDescription>
+          <CardDescription>Generic team/organization flag placeholder component</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
             <div>
-              <h3 className="text-sm font-semibold mb-3">All Variants (md size)</h3>
+              <h3 className="text-sm font-semibold mb-3">Generic Placeholder (md size)</h3>
               <div className="flex flex-wrap gap-4">
-                {teamFlagVariants.map((variant) => (
-                  <div key={variant} className="flex flex-col items-center gap-2">
-                    <TeamFlagAtom variant={variant} size="md" />
-                    <span className="text-xs text-muted-foreground text-center">
-                      {variant}
-                    </span>
-                  </div>
-                ))}
+                <div className="flex flex-col items-center gap-2">
+                  <TeamFlagAtom variant="team-1" size="md" />
+                  <span className="text-xs text-muted-foreground text-center">
+                    Team Flag Placeholder
+                  </span>
+                </div>
               </div>
             </div>
             <div>
               <h3 className="text-sm font-semibold mb-3">Size Variants</h3>
               <div className="flex items-end gap-4">
                 <div className="flex flex-col items-center gap-2">
-                  <TeamFlagAtom variant="flamengo" size="sm" />
+                  <TeamFlagAtom variant="team-1" size="sm" />
                   <span className="text-xs text-muted-foreground">sm</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <TeamFlagAtom variant="flamengo" size="md" />
+                  <TeamFlagAtom variant="team-1" size="md" />
                   <span className="text-xs text-muted-foreground">md</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <TeamFlagAtom variant="flamengo" size="lg" />
+                  <TeamFlagAtom variant="team-1" size="lg" />
                   <span className="text-xs text-muted-foreground">lg</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <TeamFlagAtom variant="flamengo" size="xl" />
+                  <TeamFlagAtom variant="team-1" size="xl" />
                   <span className="text-xs text-muted-foreground">xl</span>
                 </div>
               </div>
@@ -287,7 +282,7 @@ export default function AtomsPreview() {
       <Card>
         <CardHeader>
           <CardTitle>Logo</CardTitle>
-          <CardDescription>Logo components (Brasil, Seleção)</CardDescription>
+          <CardDescription>Generic logo placeholder component</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
@@ -295,12 +290,12 @@ export default function AtomsPreview() {
               <h3 className="text-sm font-semibold mb-3">All Variants (md size)</h3>
               <div className="flex flex-wrap gap-6">
                 <div className="flex flex-col items-center gap-2">
-                  <LogoAtom variant="brasil" size="md" />
-                  <span className="text-xs text-muted-foreground">brasil</span>
+                  <LogoAtom variant="primary" size="md" />
+                  <span className="text-xs text-muted-foreground">primary</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <LogoAtom variant="selecao" size="md" />
-                  <span className="text-xs text-muted-foreground">selecao</span>
+                  <LogoAtom variant="secondary" size="md" />
+                  <span className="text-xs text-muted-foreground">secondary</span>
                 </div>
               </div>
             </div>
@@ -308,19 +303,19 @@ export default function AtomsPreview() {
               <h3 className="text-sm font-semibold mb-3">Size Variants</h3>
               <div className="flex items-end gap-4">
                 <div className="flex flex-col items-center gap-2">
-                  <LogoAtom variant="brasil" size="sm" />
+                  <LogoAtom variant="primary" size="sm" />
                   <span className="text-xs text-muted-foreground">sm</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <LogoAtom variant="brasil" size="md" />
+                  <LogoAtom variant="primary" size="md" />
                   <span className="text-xs text-muted-foreground">md</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <LogoAtom variant="brasil" size="lg" />
+                  <LogoAtom variant="primary" size="lg" />
                   <span className="text-xs text-muted-foreground">lg</span>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <LogoAtom variant="brasil" size="xl" />
+                  <LogoAtom variant="primary" size="xl" />
                   <span className="text-xs text-muted-foreground">xl</span>
                 </div>
               </div>

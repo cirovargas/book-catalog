@@ -6,16 +6,16 @@ import { Button } from '@/components/ui/button'
 import { RowBase, type RowBaseProps } from './row-base'
 import { RowCell } from './row-cell'
 
-export interface RowCredenciamento2Props extends Omit<RowBaseProps, 'cells' | 'trailing'> {
+export interface RowPresetWithActionsProps extends Omit<RowBaseProps, 'cells' | 'trailing'> {
   id?: string | number
   category?: string
   count?: number
-  onCredentialClick?: () => void
+  onActionClick?: () => void
   onEditClick?: () => void
 }
 
-export const RowCredenciamento2 = React.forwardRef<HTMLDivElement, RowCredenciamento2Props>(
-  ({ id, category, count, onCredentialClick, onEditClick, className, ...props }, ref) => {
+export const RowPresetWithActions = React.forwardRef<HTMLDivElement, RowPresetWithActionsProps>(
+  ({ id, category, count, onActionClick, onEditClick, className, ...props }, ref) => {
     const cells = [
       id !== undefined && <RowCell key="id" title={String(id)} className="min-w-[120px]" />,
       category && <RowCell key="category" title={category} className="flex-1 min-w-[150px]" />,
@@ -25,8 +25,8 @@ export const RowCredenciamento2 = React.forwardRef<HTMLDivElement, RowCredenciam
 
     const trailing = (
       <>
-        {onCredentialClick && (
-          <Button variant="ghost" size="icon" onClick={onCredentialClick} aria-label="Credentials">
+        {onActionClick && (
+          <Button variant="ghost" size="icon" onClick={onActionClick} aria-label="View details">
             <User className="size-4" />
           </Button>
         )}
@@ -50,5 +50,8 @@ export const RowCredenciamento2 = React.forwardRef<HTMLDivElement, RowCredenciam
   }
 )
 
-RowCredenciamento2.displayName = 'RowCredenciamento2'
+RowPresetWithActions.displayName = 'RowPresetWithActions'
 
+// Backwards compatibility export
+export { RowPresetWithActions as RowCredenciamento2 }
+export type { RowPresetWithActionsProps as RowCredenciamento2Props }

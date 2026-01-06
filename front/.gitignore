@@ -5,3 +5,4 @@
 /.react-router/
 /build/
 /ATOMS_AUDIT_REPORT.md
+/yarn.lock

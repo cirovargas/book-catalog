@@ -162,7 +162,7 @@ export default function OrganismsPreview() {
             >
               <div className="space-y-2">
                 <Label htmlFor="email">E-mail</Label>
-                <Input id="email" type="email" placeholder="brasil@email.com.br" />
+                <Input id="email" type="email" placeholder="user@example.com" />
               </div>
             </ModalOrganism>
           </div>
@@ -178,10 +178,10 @@ export default function OrganismsPreview() {
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">Default with chart placeholder</p>
             <DashboardCardOrganism
-              teamA={{ name: 'São Bernardo do Campo', state: 'SP' }}
-              teamB={{ name: 'Ponte preta', state: 'SP' }}
-              location="Vitorino Gonçalves Dias - PR"
-              dateTime="22/10/2025 às 20:00 hs"
+              teamA={{ name: 'Team Alpha', state: 'NY' }}
+              teamB={{ name: 'Team Beta', state: 'CA' }}
+              location="Main Stadium - City"
+              dateTime="01/15/2025 at 20:00"
               chart={
                 <div className="w-32 h-32 rounded-full border-8 border-green-500 border-t-yellow-500 flex items-center justify-center">
                   <span className="text-2xl font-bold">95%</span>
@@ -215,9 +215,9 @@ export default function OrganismsPreview() {
             <p className="text-sm text-muted-foreground">Default totalizer with all tones</p>
             <TotalizerOrganism
               items={[
-                { value: 32293, label: 'Pendentes', tone: 'warning' },
-                { value: 4185, label: 'Aprovados', tone: 'success' },
-                { value: 7814, label: 'Reprovados', tone: 'danger' },
+                { value: 32293, label: 'Pending', tone: 'warning' },
+                { value: 4185, label: 'Approved', tone: 'success' },
+                { value: 7814, label: 'Rejected', tone: 'danger' },
                 { value: 32196, label: 'Total', tone: 'info' }
               ]}
             />
@@ -258,31 +258,31 @@ export default function OrganismsPreview() {
             <p className="text-sm text-muted-foreground">Three variants (primary/warning/disabled)</p>
             <div className="flex flex-wrap gap-4">
               <EventCardOrganism
-                teamA={{ name: 'São Bernardo do Campo', state: 'SP' }}
-                teamB={{ name: 'Ponte preta', state: 'SP' }}
-                location="Estádio Beira - Rio - RS"
-                dateTime="22/10/2025 às 20:00 hs"
-                timeRemaining="10 horas restantes"
+                teamA={{ name: 'Team Alpha', state: 'NY' }}
+                teamB={{ name: 'Team Beta', state: 'CA' }}
+                location="Main Stadium - City"
+                dateTime="01/15/2025 at 20:00"
+                timeRemaining="10 hours remaining"
                 tone="primary"
                 status="open"
-                onButtonClick={() => console.log('Credenciar clicked')}
+                onButtonClick={() => console.log('Register clicked')}
               />
               <EventCardOrganism
-                teamA={{ name: 'São Bernardo do Campo', state: 'SP' }}
-                teamB={{ name: 'Ponte preta', state: 'SP' }}
-                location="Estádio Beira - Rio - RS"
-                dateTime="22/10/2025 às 20:00 hs"
-                timeRemaining="2 horas restantes"
+                teamA={{ name: 'Team Alpha', state: 'NY' }}
+                teamB={{ name: 'Team Beta', state: 'CA' }}
+                location="Main Stadium - City"
+                dateTime="01/15/2025 at 20:00"
+                timeRemaining="2 hours remaining"
                 tone="warning"
                 status="closing"
-                onButtonClick={() => console.log('Credenciar clicked')}
+                onButtonClick={() => console.log('Register clicked')}
               />
               <EventCardOrganism
-                teamA={{ name: 'São Bernardo do Campo', state: 'SP' }}
-                teamB={{ name: 'Ponte preta', state: 'SP' }}
-                location="Estádio Beira - Rio - RS"
-                dateTime="22/10/2025 às 20:00 hs"
-                timeRemaining="Encerrado"
+                teamA={{ name: 'Team Alpha', state: 'NY' }}
+                teamB={{ name: 'Team Beta', state: 'CA' }}
+                location="Main Stadium - City"
+                dateTime="01/15/2025 at 20:00"
+                timeRemaining="Closed"
                 tone="disabled"
                 status="closed"
               />
@@ -443,13 +443,13 @@ export default function OrganismsPreview() {
             <p className="text-sm font-medium">RowDashboard</p>
             <div className="border rounded-lg overflow-hidden">
               <RowDashboard
-                eventTitle="Título do evento"
-                location="Localização"
+                eventTitle="Event Title"
+                location="Location"
                 badges={[
-                  { label: 'Pendentes', value: 20, variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
-                  { label: 'Aprovados', value: 80, variant: 'secondary', className: 'bg-green-100 text-green-800 border-green-300' },
-                  { label: 'Impressos', value: 0, variant: 'secondary', className: 'bg-blue-100 text-blue-800 border-blue-300' },
-                  { label: 'Cadastros', value: 100, variant: 'secondary', className: 'bg-gray-100 text-gray-800 border-gray-300' }
+                  { label: 'Pending', value: 20, variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
+                  { label: 'Approved', value: 80, variant: 'secondary', className: 'bg-green-100 text-green-800 border-green-300' },
+                  { label: 'Printed', value: 0, variant: 'secondary', className: 'bg-blue-100 text-blue-800 border-blue-300' },
+                  { label: 'Registered', value: 100, variant: 'secondary', className: 'bg-gray-100 text-gray-800 border-gray-300' }
                 ]}
               />
             </div>
@@ -460,18 +460,18 @@ export default function OrganismsPreview() {
             <p className="text-sm font-medium">RowCompany</p>
             <div className="border rounded-lg overflow-hidden">
               <RowCompany
-                companyName="TV Tocantins LTDA"
-                tradeName="TV Anhanguera"
-                cnpj="02.526.333/001-84"
-                status={{ label: 'Ativo', variant: 'secondary', className: 'bg-green-100 text-green-800 border-green-300' }}
+                companyName="Acme Corporation Inc."
+                tradeName="Acme Corp"
+                cnpj="12.345.678/0001-90"
+                status={{ label: 'Active', variant: 'secondary', className: 'bg-green-100 text-green-800 border-green-300' }}
                 onViewClick={() => console.log('View')}
                 onEditClick={() => console.log('Edit')}
               />
               <RowCompany
-                companyName="TV Tocantins LTDA"
-                tradeName="TV Anhanguera"
-                cnpj="02.526.333/001-84"
-                status={{ label: 'Ativo', variant: 'secondary', className: 'bg-green-100 text-green-800 border-green-300' }}
+                companyName="Acme Corporation Inc."
+                tradeName="Acme Corp"
+                cnpj="12.345.678/0001-90"
+                status={{ label: 'Active', variant: 'secondary', className: 'bg-green-100 text-green-800 border-green-300' }}
                 selectable
                 selected
                 onSelectedChange={(checked) => console.log('Selected:', checked)}
@@ -485,17 +485,17 @@ export default function OrganismsPreview() {
             <div className="border rounded-lg overflow-hidden">
               <RowPeople
                 id="15113"
-                name="Rogério Rodrigues da Silva"
-                email="gero&fotografia@gmail.com"
-                phone="(11) 98322-3912"
+                name="Jane Doe"
+                email="jane.doe@example.com"
+                phone="(555) 123-4567"
                 onEditClick={() => console.log('Edit')}
                 onDeleteClick={() => console.log('Delete')}
               />
               <RowPeople
                 id="15113"
-                name="Rogério Rodrigues da Silva"
-                email="gero&fotografia@gmail.com"
-                phone="(11) 98322-3912"
+                name="Jane Doe"
+                email="jane.doe@example.com"
+                phone="(555) 123-4567"
                 selectable
                 selected
                 onSelectedChange={(checked) => console.log('Selected:', checked)}
@@ -509,20 +509,20 @@ export default function OrganismsPreview() {
             <div className="border rounded-lg overflow-hidden">
               <RowApprove
                 id="46288"
-                companyName="TV Anhanguera"
-                cnpj="02.526.333/0001-84"
-                email="tv.anhanguera@gmail.com"
-                status={{ label: 'Pendente', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
+                companyName="Acme Corporation"
+                cnpj="12.345.678/0001-90"
+                email="contact@acme.com"
+                status={{ label: 'Pending', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
                 onSearchClick={() => console.log('Search')}
                 onApproveClick={() => console.log('Approve')}
                 onRejectClick={() => console.log('Reject')}
               />
               <RowApprove
                 id="46288"
-                companyName="TV Anhanguera"
-                cnpj="02.526.333/0001-84"
-                email="tv.anhanguera@gmail.com"
-                status={{ label: 'Pendente', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
+                companyName="Acme Corporation"
+                cnpj="12.345.678/0001-90"
+                email="contact@acme.com"
+                status={{ label: 'Pending', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
                 selectable
                 selected
                 onSelectedChange={(checked) => console.log('Selected:', checked)}
@@ -536,10 +536,10 @@ export default function OrganismsPreview() {
             <div className="border rounded-lg overflow-hidden">
               <RowEvent
                 id="4628800"
-                matchup="Ferroviária - SP x Bahia - BA"
-                location="Estádio Beira - Rio - RS"
-                dateTime="22/10/2025 às 20:00 hs"
-                competition="Copa do Brasil - Feminino"
+                matchup="Team Alpha - NY x Team Beta - CA"
+                location="Main Stadium - City"
+                dateTime="01/15/2025 at 20:00"
+                competition="Championship Series - Division A"
                 onWorkflowClick={() => console.log('Workflow')}
                 onCredentialClick={() => console.log('Credential')}
                 onEditClick={() => console.log('Edit')}
@@ -553,8 +553,8 @@ export default function OrganismsPreview() {
             <div className="border rounded-lg overflow-hidden">
               <RowCredenciamento
                 code="00013085"
-                eventName="Campeonato Brasileiro - Série A"
-                status={{ label: 'Aprovado', variant: 'secondary', className: 'bg-green-100 text-green-800 border-green-300' }}
+                eventName="Championship Event - Series A"
+                status={{ label: 'Approved', variant: 'secondary', className: 'bg-green-100 text-green-800 border-green-300' }}
               />
             </div>
           </div>
@@ -565,9 +565,9 @@ export default function OrganismsPreview() {
             <div className="border rounded-lg overflow-hidden">
               <RowCredenciamento2
                 id="4628800"
-                category="Autonomos"
+                category="Freelancers"
                 count={23}
-                onCredentialClick={() => console.log('Credential')}
+                onActionClick={() => console.log('View details')}
                 onEditClick={() => console.log('Edit')}
               />
             </div>
@@ -579,10 +579,10 @@ export default function OrganismsPreview() {
             <div className="border rounded-lg overflow-hidden">
               <RowCredenciamento3
                 id="0000023407"
-                startDate="13/10/2025 - 00:00"
-                endDate="22/10/2025 - 18:00"
-                description="Amarelo - BRA x URU - 2018 FIFAWCRQ"
-                onCredentialClick={() => console.log('Credential')}
+                startDate="01/10/2025 - 00:00"
+                endDate="01/15/2025 - 18:00"
+                description="Media Coverage - Event Series 2025"
+                onActionClick={() => console.log('View details')}
                 onEditClick={() => console.log('Edit')}
               />
             </div>
@@ -594,33 +594,33 @@ export default function OrganismsPreview() {
             <div className="border rounded-lg overflow-hidden">
               <RowCredenciamentoPessoas
                 id="4628800"
-                name="João Luiz Dela Coleta"
-                document="40708987428494"
-                role="Comentarista"
-                portal="Portal nova 15"
-                status={{ label: 'Pendente', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
+                name="John Smith"
+                document="123456789"
+                role="Commentator"
+                portal="Portal Main"
+                status={{ label: 'Pending', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
                 onApproveClick={() => console.log('Approve')}
                 onRejectClick={() => console.log('Reject')}
                 onMoreClick={() => console.log('More')}
               />
               <RowCredenciamentoPessoas
                 id="4628800"
-                name="João Luiz Dela Coleta"
-                document="40708987428494"
-                role="Comentarista"
-                portal="Portal nova 15"
-                status={{ label: 'Pendente', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
+                name="John Smith"
+                document="123456789"
+                role="Commentator"
+                portal="Portal Main"
+                status={{ label: 'Pending', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
                 selectable
                 selected
                 onSelectedChange={(checked) => console.log('Selected:', checked)}
               />
               <RowCredenciamentoPessoas
                 id="4628800"
-                name="João Luiz Dela Coleta"
-                document="40708987428494"
-                role="Comentarista"
-                portal="Portal nova 15"
-                status={{ label: 'Pendente', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
+                name="John Smith"
+                document="123456789"
+                role="Commentator"
+                portal="Portal Main"
+                status={{ label: 'Pending', variant: 'secondary', className: 'bg-yellow-100 text-yellow-800 border-yellow-300' }}
                 variant="disabled"
               />
             </div>

@@ -482,7 +482,7 @@ export default function MoleculesPreview() {
                 Default Link
               </LinkMolecule>
               <LinkMolecule variant="back" to="/dashboard">
-                Voltar
+                Back
               </LinkMolecule>
               <LinkMolecule variant="action" to="/dashboard">
                 Action Link
@@ -532,9 +532,9 @@ export default function MoleculesPreview() {
             <p className="text-sm text-muted-foreground">Image on right (default)</p>
             <div className="max-w-md">
               <EventTagMolecule
-                title="Campeonato Brasileiro Série A"
+                title="Championship Series A"
                 imageSrc="https://via.placeholder.com/150x100/1e3a8a/ffffff?text=Logo"
-                imageAlt="Brasileirão Logo"
+                imageAlt="Championship Logo"
                 onClick={() => console.log('Event tag clicked')}
               />
             </div>
@@ -543,9 +543,9 @@ export default function MoleculesPreview() {
             <p className="text-sm text-muted-foreground">Image on left</p>
             <div className="max-w-md">
               <EventTagMolecule
-                title="Campeonato Brasileiro Série A"
+                title="Championship Series A"
                 imageSrc="https://via.placeholder.com/150x100/1e3a8a/ffffff?text=Logo"
-                imageAlt="Brasileirão Logo"
+                imageAlt="Championship Logo"
                 imagePosition="left"
                 onClick={() => console.log('Event tag clicked')}
               />
@@ -555,9 +555,9 @@ export default function MoleculesPreview() {
             <p className="text-sm text-muted-foreground">With long title (wraps on small widths)</p>
             <div className="max-w-md">
               <EventTagMolecule
-                title="Campeonato Brasileiro Série A - Temporada 2024 com muitos detalhes e informações"
+                title="Championship Series A - Season 2024 with many details and information"
                 imageSrc="https://via.placeholder.com/150x100/1e3a8a/ffffff?text=Logo"
-                imageAlt="Brasileirão Logo"
+                imageAlt="Championship Logo"
                 onClick={() => console.log('Event tag clicked')}
               />
             </div>

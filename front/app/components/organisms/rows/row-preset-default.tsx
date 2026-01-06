@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { RowBase, type RowBaseProps } from './row-base'
 import { RowCell } from './row-cell'
 
-export interface RowCredenciamentoProps extends Omit<RowBaseProps, 'cells' | 'status'> {
+export interface RowPresetDefaultProps extends Omit<RowBaseProps, 'cells' | 'status'> {
   code?: string | number
   eventName?: string
   status?: {
@@ -15,11 +15,11 @@ export interface RowCredenciamentoProps extends Omit<RowBaseProps, 'cells' | 'st
   }
 }
 
-export const RowCredenciamento = React.forwardRef<HTMLDivElement, RowCredenciamentoProps>(
+export const RowPresetDefault = React.forwardRef<HTMLDivElement, RowPresetDefaultProps>(
   ({ code, eventName, status, className, ...props }, ref) => {
     const cells = [
       code !== undefined && <RowCell key="code" title={String(code)} className="min-w-[120px]" />,
-      <RowCell key="event" title={eventName || 'Campeonato Brasileiro - Série A'} className="flex-1 min-w-[300px]" />
+      <RowCell key="event" title={eventName || 'Championship Event - Series A'} className="flex-1 min-w-[300px]" />
     ].filter(Boolean) as React.ReactNode[]
 
     const statusBadge = status && (
@@ -40,5 +40,8 @@ export const RowCredenciamento = React.forwardRef<HTMLDivElement, RowCredenciame
   }
 )
 
-RowCredenciamento.displayName = 'RowCredenciamento'
+RowPresetDefault.displayName = 'RowPresetDefault'
 
+// Backwards compatibility export
+export { RowPresetDefault as RowCredenciamento }
+export type { RowPresetDefaultProps as RowCredenciamentoProps }

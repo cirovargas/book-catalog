@@ -36,11 +36,11 @@ export interface HeaderOrganismProps {
 }
 
 const defaultIconMap: Record<string, LucideIcon> = {
-  Início: Home,
-  Empresas: Briefcase,
-  Pessoas: Users,
-  Eventos: Calendar,
-  Configurações: Settings
+  Home: Home,
+  Companies: Briefcase,
+  People: Users,
+  Events: Calendar,
+  Settings: Settings
 }
 
 export const HeaderOrganism = React.forwardRef<HTMLElement, HeaderOrganismProps>(
@@ -49,11 +49,11 @@ export const HeaderOrganism = React.forwardRef<HTMLElement, HeaderOrganismProps>
     const [openMenus, setOpenMenus] = React.useState<Record<string, boolean>>({})
 
     const defaultItems: HeaderMenuItem[] = [
-      { label: 'Início', to: '/dashboard', icon: Home },
-      { label: 'Empresas', to: '/companies', icon: Briefcase },
-      { label: 'Pessoas', to: '/users', icon: Users },
-      { label: 'Eventos', to: '/events', icon: Calendar },
-      { label: 'Configurações', to: '/settings', icon: Settings }
+      { label: 'Home', to: '/dashboard', icon: Home },
+      { label: 'Companies', to: '/companies', icon: Briefcase },
+      { label: 'People', to: '/users', icon: Users },
+      { label: 'Events', to: '/events', icon: Calendar },
+      { label: 'Settings', to: '/settings', icon: Settings }
     ]
 
     const menuItems = items.length > 0 ? items : defaultItems
@@ -94,7 +94,7 @@ export const HeaderOrganism = React.forwardRef<HTMLElement, HeaderOrganismProps>
         <div className="flex items-center">
           {logo || (
             <Link to="/dashboard" className="flex items-center gap-2" aria-label="Home">
-              <div className="text-xl font-bold text-primary">BRASIL</div>
+              <div className="text-xl font-bold text-primary">ORGANIZATION</div>
             </Link>
           )}
         </div>

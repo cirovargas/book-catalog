@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { RowBase, type RowBaseProps } from './row-base'
 import { RowCell } from './row-cell'
 
-export interface RowCredenciamentoPessoasProps extends Omit<RowBaseProps, 'leading' | 'cells' | 'trailing' | 'status'> {
+export interface RowPresetWithAvatarProps extends Omit<RowBaseProps, 'leading' | 'cells' | 'trailing' | 'status'> {
   id?: string | number
   name: string
   document?: string
@@ -25,7 +25,7 @@ export interface RowCredenciamentoPessoasProps extends Omit<RowBaseProps, 'leadi
   onMoreClick?: () => void
 }
 
-export const RowCredenciamentoPessoas = React.forwardRef<HTMLDivElement, RowCredenciamentoPessoasProps>(
+export const RowPresetWithAvatar = React.forwardRef<HTMLDivElement, RowPresetWithAvatarProps>(
   ({ id, name, document, role, portal, avatarSrc, status, onApproveClick, onRejectClick, onMoreClick, className, ...props }, ref) => {
     const getInitials = (name: string) => {
       return name
@@ -91,5 +91,8 @@ export const RowCredenciamentoPessoas = React.forwardRef<HTMLDivElement, RowCred
   }
 )
 
-RowCredenciamentoPessoas.displayName = 'RowCredenciamentoPessoas'
+RowPresetWithAvatar.displayName = 'RowPresetWithAvatar'
 
+// Backwards compatibility export
+export { RowPresetWithAvatar as RowCredenciamentoPessoas }
+export type { RowPresetWithAvatarProps as RowCredenciamentoPessoasProps }
