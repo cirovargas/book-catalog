@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import {
@@ -11,7 +9,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table'
 import {
   type ColumnDef,
@@ -23,116 +21,119 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table'
 import { useUsers } from '@/hooks/use-users'
 import type { User } from '@/types/user'
-import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
-  Eye,
-  ChevronLeft,
-  ChevronRight,
-  ArrowUpDown,
-  MoreHorizontal,
-  RefreshCw,
-} from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { Plus, ArrowUpDown, RefreshCw } from 'lucide-react'
+
+import { CrudIndexLayout } from '@/components/crud/crud-layouts'
+import { CrudPageHeader } from '@/components/crud/crud-page-header'
+import { CrudCard } from '@/components/crud/crud-card'
+import { CrudSearchInput } from '@/components/crud/crud-search-input'
+import { CrudPagination } from '@/components/crud/crud-pagination'
+import { CrudActionsMenu } from '@/components/crud/crud-actions-menu'
+import { ConfirmDialog } from '@/components/feedback/confirm-dialog'
 
 export default function Users() {
   const {
     users,
     isLoading,
     searchQuery,
-    currentPage,
     fetchUsers,
     deleteUser,
     setSearchQuery,
     refreshUsers,
     hasUsers,
     isCacheValid,
-    paginationInfo,
+    paginationInfo
   } = useUsers()
 
-  // TanStack Table states
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+  const [deleteUserId, setDeleteUserId] = useState<number | null>(null)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-  const handleSearch = (value: string) => {
+  function handleSearch(value: string) {
     setSearchQuery(value)
-    fetchUsers(1, value) // Reset to first page when searching
+    fetchUsers(1, value)
   }
 
-  const handleDelete = async (userId: number) => {
-    if (!confirm('Are you sure you want to delete this user?')) {
-      return
-    }
-
-    try {
-      await deleteUser(userId)
-    } catch (error) {
-      // Error handling is done in the store
-    }
-  }
-
-  const handlePageChange = (newPage: number) => {
+  function handlePageChange(newPage: number) {
     fetchUsers(newPage, searchQuery)
   }
 
-  const handleRefresh = async () => {
+  async function handleRefresh() {
     await refreshUsers()
   }
 
-  const formatDate = (dateString?: string) => {
+  function formatDate(dateString?: string) {
     if (!dateString) return 'N/A'
     return new Date(dateString).toLocaleDateString()
   }
 
-  const getRoleBadgeVariant = (roles: string[]) => {
+  function getRoleBadgeVariant(roles: string[]) {
     if (roles.includes('ROLE_ADMIN')) return 'destructive'
     return 'secondary'
   }
 
-  // Define columns for TanStack Table
+  function handleRequestDelete(userId: number) {
+    setDeleteUserId(userId)
+    setIsDeleteDialogOpen(true)
+  }
+
+  async function handleConfirmDelete() {
+    if (deleteUserId == null) return
+
+    try {
+      await deleteUser(deleteUserId)
+    } finally {
+      setIsDeleteDialogOpen(false)
+      setDeleteUserId(null)
+    }
+  }
+
+  function handleDeleteDialogOpenChange(open: boolean) {
+    setIsDeleteDialogOpen(open)
+    if (!open) {
+      setDeleteUserId(null)
+    }
+  }
+
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: 'email',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="h-8 p-0 font-medium"
-          >
-            Email
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() =>
+            column.toggleSorting(column.getIsSorted() === 'asc')
+          }
+          className="h-8 p-0 font-medium"
+        >
+          Email
+          <ArrowUpDown className="ml-2 h-4 w-4" aria-hidden="true" />
+        </Button>
+      ),
       cell: ({ row }) => {
         const user = row.original
+
         return (
           <div>
             <div className="font-medium">{user.email}</div>
-            <div className="text-sm text-gray-500">ID: {user.id}</div>
+            <div className="text-xs text-muted-foreground">ID: {user.id}</div>
           </div>
         )
-      },
+      }
     },
     {
       accessorKey: 'roles',
       header: 'Roles',
       cell: ({ row }) => {
         const user = row.original
+
         return (
           <div className="flex flex-wrap gap-1">
             {user.roles.map((role) => (
@@ -146,29 +147,27 @@ export default function Users() {
             ))}
           </div>
         )
-      },
+      }
     },
     {
       accessorKey: 'createdAt',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="h-8 p-0 font-medium"
-          >
-            Created
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => {
-        return (
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {formatDate(row.getValue('createdAt'))}
-          </div>
-        )
-      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() =>
+            column.toggleSorting(column.getIsSorted() === 'asc')
+          }
+          className="h-8 p-0 font-medium"
+        >
+          Created
+          <ArrowUpDown className="ml-2 h-4 w-4" aria-hidden="true" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="text-sm text-muted-foreground">
+          {formatDate(row.getValue('createdAt'))}
+        </div>
+      )
     },
     {
       id: 'actions',
@@ -177,41 +176,16 @@ export default function Users() {
         const user = row.original
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link to={`/users/${user.id}`} className="flex items-center">
-                  <Eye className="mr-2 h-4 w-4" />
-                  View
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to={`/users/${user.id}/edit`} className="flex items-center">
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleDelete(user.id)}
-                className="text-red-600 focus:text-red-600"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <CrudActionsMenu
+            viewUrl={`/users/${user.id}`}
+            editUrl={`/users/${user.id}/edit`}
+            onDeleteClick={() => handleRequestDelete(user.id)}
+          />
         )
-      },
-    },
+      }
+    }
   ]
 
-  // Initialize TanStack Table
   const table = useReactTable({
     data: users,
     columns,
@@ -227,70 +201,74 @@ export default function Users() {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
-    },
+      rowSelection
+    }
   })
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Users</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage user accounts and permissions
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={isLoading}
-            className="flex items-center space-x-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-            <span>Refresh</span>
-          </Button>
-          <Link to="/users/create">
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Add User
-            </Button>
-          </Link>
-        </div>
-      </div>
+    <>
+      <CrudIndexLayout
+        header={
+          <CrudPageHeader
+            title="Users"
+            description="Manage user accounts and permissions"
+            actions={
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  disabled={isLoading}
+                  className="flex items-center gap-2"
+                >
+                  <RefreshCw
+                    className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+                    aria-hidden="true"
+                  />
+                  <span>Refresh</span>
+                </Button>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>User List</CardTitle>
-            {isCacheValid && (
-              <div className="text-sm text-green-600 flex items-center space-x-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Cache valid</span>
-              </div>
-            )}
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <Input
-                placeholder="Search users..."
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10"
+                <Link to="/users/create">
+                  <Button type="button">
+                    <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                    Add User
+                  </Button>
+                </Link>
+              </>
+            }
+          />
+        }
+      >
+        <CrudCard
+          title="User List"
+          statusSlot={
+            isCacheValid ? (
+              <div className="flex items-center gap-1 text-emerald-500">
+              <span
+                className="h-2 w-2 rounded-full bg-emerald-500"
+                aria-hidden="true"
               />
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
+                <span className="text-xs font-medium">Cache valid</span>
+              </div>
+            ) : null
+          }
+          toolbarSlot={
+            <CrudSearchInput
+              value={searchQuery}
+              placeholder="Search users..."
+              onChange={handleSearch}
+            />
+          }
+        >
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
               <LoadingSpinner size="md" />
             </div>
           ) : !hasUsers ? (
             <div className="flex items-center justify-center py-8">
-              <div className="text-gray-500">No users found</div>
+              <div className="text-sm text-muted-foreground">
+                No users found
+              </div>
             </div>
           ) : (
             <>
@@ -299,21 +277,20 @@ export default function Users() {
                   <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
                       <TableRow key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => {
-                          return (
-                            <TableHead key={header.id}>
-                              {header.isPlaceholder
-                                ? null
-                                : flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
-                                  )}
-                            </TableHead>
-                          )
-                        })}
+                        {headerGroup.headers.map((header) => (
+                          <TableHead key={header.id}>
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                          </TableHead>
+                        ))}
                       </TableRow>
                     ))}
                   </TableHeader>
+
                   <TableBody>
                     {table.getRowModel().rows?.length ? (
                       table.getRowModel().rows.map((row) => (
@@ -335,7 +312,7 @@ export default function Users() {
                       <TableRow>
                         <TableCell
                           colSpan={columns.length}
-                          className="h-24 text-center"
+                          className="h-24 text-center text-sm text-muted-foreground"
                         >
                           No results.
                         </TableCell>
@@ -345,41 +322,28 @@ export default function Users() {
                 </Table>
               </div>
 
-              {/* Pagination */}
-              <div className="flex items-center justify-between mt-6">
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Showing {((paginationInfo.currentPage - 1) * 10) + 1} to{' '}
-                  {Math.min(paginationInfo.currentPage * 10, paginationInfo.totalUsers)} of{' '}
-                  {paginationInfo.totalUsers} users
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(paginationInfo.currentPage - 1)}
-                    disabled={!paginationInfo.hasPrevPage}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    Previous
-                  </Button>
-                  <span className="text-sm">
-                    Page {paginationInfo.currentPage} of {paginationInfo.totalPages}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(paginationInfo.currentPage + 1)}
-                    disabled={!paginationInfo.hasNextPage}
-                  >
-                    Next
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
+              <CrudPagination
+                page={paginationInfo.currentPage}
+                pageSize={10}
+                totalItems={paginationInfo.totalUsers}
+                hasPrevPage={paginationInfo.hasPrevPage}
+                hasNextPage={paginationInfo.hasNextPage}
+                onPageChange={handlePageChange}
+                entityLabel="users"
+              />
             </>
           )}
-        </CardContent>
-      </Card>
-    </div>
+        </CrudCard>
+      </CrudIndexLayout>
+      <ConfirmDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={handleDeleteDialogOpenChange}
+        title="Delete user"
+        description="Are you sure you want to delete this user? This action cannot be undone."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        onConfirm={handleConfirmDelete}
+      />
+    </>
   )
 }
