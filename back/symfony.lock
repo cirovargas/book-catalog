@@ -84,9 +84,6 @@
             ".php-cs-fixer.dist.php"
         ]
     },
-    "killerwolf/mcp-profiler-bundle": {
-        "version": "0.1.2"
-    },
     "lexik/jwt-authentication-bundle": {
         "version": "3.1",
         "recipe": {
